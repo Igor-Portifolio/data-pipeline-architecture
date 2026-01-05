@@ -1,0 +1,2 @@
+cd C:\projetos_solve\scripts_geral
+.\scripts\commit_diario.ps1
