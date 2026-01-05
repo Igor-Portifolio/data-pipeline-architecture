@@ -1,0 +1,21 @@
+Endereço
+----------
+Limpesa de Endereços: Padronizar Endereços e afins.
+
+Função de normalizar nomes parecidos com um mesmo prefixo e possiveis miss clicks que podem ter ocorrido quando se trata de
+endereços.
+
+função baseada no cep e procura na internet se possivel
+---------------
+
+
+Faixas etárias
+Segmentação em decadas
+Função de colocar regiões do Brasil referente a cada estado de uma lista
+Limpeza de endereço (Padronizar escritas (avenidas ou av, apartamentos ou ap e erros de escrita para o nome do bairro
+), conferir localidade com base no CEP)
+
+
+
+
+
