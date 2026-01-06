@@ -9,11 +9,13 @@ função baseada no cep e procura na internet se possivel
 ---------------
 
 
-Faixas etárias
-Segmentação em decadas
 Função de colocar regiões do Brasil referente a cada estado de uma lista
 Limpeza de endereço (Padronizar escritas (avenidas ou av, apartamentos ou ap e erros de escrita para o nome do bairro
 ), conferir localidade com base no CEP)
+
+ideia do gpt de separar as endereco e geografia
+- Confirmar se faz sentido criar uma classe geografia que so vai conter uma função?
+
 
 
 
