@@ -1,4 +1,4 @@
-from src.domain.vocabulario import *
+from src.domain.vocabulario.voc_lingua import *
 import re
 from typing import List
 import pandas as pd

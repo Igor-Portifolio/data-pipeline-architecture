@@ -1,7 +1,5 @@
-from typing import Literal
 import pandas as pd
-from src.domain.age_groups import *
-from datetime import date, datetime
+from src.domain.vocabulario.voc_temporal import *
 from typing import Optional
 from datetime import date, datetime
 

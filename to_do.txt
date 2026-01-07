@@ -1,20 +1,7 @@
-Endereço
-----------
-Limpesa de Endereços: Padronizar Endereços e afins.
+Rever classe Standard_text
+Padronizar endereço e compl
+Checar CEP e bairro
 
-Função de normalizar nomes parecidos com um mesmo prefixo e possiveis miss clicks que podem ter ocorrido quando se trata de
-endereços.
-
-função baseada no cep e procura na internet se possivel
----------------
-
-
-Função de colocar regiões do Brasil referente a cada estado de uma lista
-Limpeza de endereço (Padronizar escritas (avenidas ou av, apartamentos ou ap e erros de escrita para o nome do bairro
-), conferir localidade com base no CEP)
-
-ideia do gpt de separar as endereco e geografia
-- Confirmar se faz sentido criar uma classe geografia que so vai conter uma função?
 
 
 

@@ -1,5 +1,4 @@
-import pandas as pd
-from src.domain.age_and_date import *
+from src.domain.regras.age_and_date import *
 
 
 class AgeClassifier:
