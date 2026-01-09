@@ -1,6 +1,7 @@
-Rever classe Standard_text
-Padronizar endereço e compl
-Checar CEP e bairro
+
+Checar bairro ver oq pode ser feito.
+
+
 
 
 

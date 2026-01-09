@@ -12,7 +12,7 @@
 # TIPOS DE LOGRADOURO
 # ---------------------------------------------------------
 LOGRADOUROS = {
-    "RUA": {"r", "rua"},
+    "RUA": {"rua"},
     "AVENIDA": {"av", "av.", "avenida"},
     "ALAMEDA": {"al", "alameda"},
     "TRAVESSA": {"trav", "travessa"},
@@ -29,7 +29,7 @@ LOGRADOUROS = {
 # UNIDADES PREDIAIS
 # ---------------------------------------------------------
 UNIDADES = {
-    "APARTAMENTO": {"ap", "apt", "apto", "apartamento"},
+    "APARTAMENTO": {"ap", "apt", "apto", "apartamento", "aapt", },
     "ANDAR": {"and", "andar"},
     "BLOCO": {"bl", "bloco"},
     "CASA": {"casa"},
@@ -45,8 +45,8 @@ UNIDADES = {
 # COMPLEMENTOS ESPACIAIS
 # ---------------------------------------------------------
 COMPLEMENTOS = {
-    "FUNDOS": {"fundos"},
-    "FRENTE": {"frente"},
+    "FUNDOS": {"fundos", "fds", "fd"},
+    "FRENTE": {"frente", "frt"},
     "TÉRREO": {"terreo", "térreo"},
     "SUBSOLO": {"subsolo"},
     "COBERTURA": {"cobertura"},

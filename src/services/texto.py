@@ -35,70 +35,6 @@ class Standard_text:
 
         return ' '.join(resultado)
 
-    def create_feedback_file(rev: str) -> Path:
-        """
-        Cria a pasta 'text_files' ao lado da pasta src.
-        Gera um arquivo client_feedback_<rev>.txt.
-        Se já existir, sobrescreve.
-        """
-
-        # Caminho absoluto deste arquivo
-        current_file = Path(__file__).resolve()
-
-        # Raiz do projeto (pasta pai da src)
-        project_root = current_file.parent.parent
-
-        # Pasta de saída
-        folder = project_root / "text_files"
-        folder.mkdir(exist_ok=True)
-
-        # Nome baseado na revisão
-        file_name = f"client_feedback_{rev}.txt"
-        file_path = folder / file_name
-
-        # Cria ou sobrescreve
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(f"{rev}:\n\n")
-
-        return file_path
-
-    def normalize_nulls(
-            self,
-            coluna: str = None,
-            nulo: str = None
-    ) -> pd.DataFrame:
-        """
-        Trata valores nulos no DataFrame.
-
-        - coluna=None  → aplica a todas as colunas
-        - nulo=None    → converte nulos para NaN
-        - nulo="texto" → substitui nulos pela string fornecida
-        """
-
-        df = self.df.copy()
-
-        def substituir(serie: pd.Series):
-            if nulo is None:
-                # deixa em NaN
-                return serie.replace(["", " ", "nan", "None"], pd.NA)
-            else:
-                # substitui nulos pela string
-                return serie.replace(["", " ", "nan", "None", pd.NA], nulo)
-
-        # Se nenhuma coluna foi especificada → todas
-        if coluna is None:
-            for col in df.columns:
-                df[col] = substituir(df[col])
-        else:
-            if coluna not in df.columns:
-                raise KeyError(f"Coluna '{coluna}' não encontrada no DataFrame!")
-
-            df[coluna] = substituir(df[coluna])
-
-        # Atualiza self.df e retorna
-        self.df = df
-        return df
-
     def _get_string_columns(self) -> list:
         return list(self.df.select_dtypes(include=["object", "string"]).columns)
 
@@ -143,13 +79,6 @@ class Standard_text:
             else:
                 self.df[col] = nova_serie
 
-        return self.df
-
-    def drop_exact_duplicates(self) -> pd.DataFrame:
-
-        antes = len(self.df)
-        self.df = self.df.drop_duplicates(ignore_index=True).copy()
-        removidas = antes - len(self.df)
         return self.df
 
     def remover_emojis_e_simbolos(self, columns=None) -> pd.DataFrame:
@@ -207,7 +136,6 @@ class Standard_text:
 
         self.df = df
         return df
-
 
     def limpar_nomes_proprios(
             self,
@@ -298,4 +226,19 @@ class Standard_text:
             ],
         )
 
+    def remover_texto_apenas_numerico(self, coluna: str) -> pd.DataFrame:
+        """
+        Remove valores que contêm apenas números em uma coluna de texto.
+        """
 
+        if coluna not in self.df.columns:
+            raise KeyError(f"Coluna '{coluna}' não encontrada.")
+
+        def limpar(valor):
+            if isinstance(valor, str) and valor.strip().isdigit():
+                return pd.NA
+            return valor
+
+        self.df[coluna] = self.df[coluna].apply(limpar)
+
+        return self.df
