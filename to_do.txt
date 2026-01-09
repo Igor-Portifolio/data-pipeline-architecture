@@ -1,5 +1,22 @@
 
-Checar bairro ver oq pode ser feito.
+
+Como armazenar os dados dos clientes (planilhas) da maneira mais profissional possivel e gratuita tendo em mente que
+extraio do google planilhas
+
+Como armazenar da melhor forma as planilhas dos estados considerando o seu formato
+site -> https://www.geoaplicada.com/dados/limites-de-bairros-do-brasil/
+
+funções de criações de data frames baseado no data frame principal
+    - separar de acordo com o estado (manter alguma forma de identificar aquela linha no df original: n de linha por exemplo)
+    - Colocar em ordem alphabetica
+    - Estudar (Jaro-Winkler | Damerau-Levenshtein) e testa-lo de forma a escolher a melhor opção ou fazer individualmente com a
+ideia que tinha pensado de verificar o numero de letras em comum e prefixos parecidos.
+    - Montar os blocos dentros dos estados das palavras parecidas
+    - Fazer X-Check com a base de dados IBGE
+    - Criar Logs "inteligentes para verificação"
+    - Função que ler o log e faz a substituição
+
+Chegar Log dos nomes tb
 
 
 

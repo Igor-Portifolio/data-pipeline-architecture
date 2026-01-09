@@ -24,7 +24,6 @@ LOGRADOUROS = {
     "CONJUNTO": {"conj", "conjunto"},
 }
 
-
 # ---------------------------------------------------------
 # UNIDADES PREDIAIS
 # ---------------------------------------------------------
@@ -40,7 +39,6 @@ UNIDADES = {
     "QUADRA": {"qd", "quadra"},
 }
 
-
 # ---------------------------------------------------------
 # COMPLEMENTOS ESPACIAIS
 # ---------------------------------------------------------
@@ -54,7 +52,6 @@ COMPLEMENTOS = {
     "ANEXO": {"anexo"},
 }
 
-
 # ---------------------------------------------------------
 # INDICADORES DE AUSÊNCIA / EXCEÇÃO
 # ---------------------------------------------------------
@@ -62,7 +59,6 @@ EXCECOES = {
     "SEM_NUMERO": {"s/n", "sn", "sem numero", "sem número"},
     "NAO_INFORMADO": {"nao informado", "não informado", "n/i"},
 }
-
 
 # ---------------------------------------------------------
 # AGRUPAMENTO GERAL (ÚTIL PARA BUSCA)
@@ -72,4 +68,56 @@ VOCABULARIO_ENDERECO = {
     "UNIDADE": UNIDADES,
     "COMPLEMENTO": COMPLEMENTOS,
     "EXCECAO": EXCECOES,
+}
+
+VOCABULARIO_BAIRRO = {
+    # Núcleos urbanos
+    "JD": "JARDIM",
+    "JARD": "JARDIM",
+    "JDIM": "JARDIM",
+
+    "VL": "VILA",
+    "VLA": "VILA",
+
+    "PQ": "PARQUE",
+    "PQUE": "PARQUE",
+
+    "CONJ": "CONJUNTO",
+    "CJ": "CONJUNTO",
+
+    "LOT": "LOTEAMENTO",
+    "LOTEAM": "LOTEAMENTO",
+
+    "RES": "RESIDENCIAL",
+    "RESID": "RESIDENCIAL",
+
+    # Santos / religiosos
+    "STA": "SANTA",
+    "ST": "SANTO",
+    "STO": "SANTO",
+    "STA.": "SANTA",
+    "STO.": "SANTO",
+
+    # Direções / regiões
+    "JD.": "JARDIM",
+    "VL.": "VILA",
+    "PQ.": "PARQUE",
+
+    # Termos frequentes
+    "CENT": "CENTRO",
+    "CTR": "CENTRO",
+
+    "IND": "INDUSTRIAL",
+    "INDUST": "INDUSTRIAL",
+
+    # Condomínios
+    "COND": "CONDOMINIO",
+    "CONDOM": "CONDOMINIO",
+
+    # Outros
+    "HAB": "HABITACIONAL",
+    "HABIT": "HABITACIONAL",
+
+    "EST": "ESTANCIA",
+    "EST.": "ESTANCIA",
 }
