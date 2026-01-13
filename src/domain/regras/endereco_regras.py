@@ -1,6 +1,7 @@
 from src.domain.vocabulario.voc_endereco import *
 import re
 from typing import List, Any
+import jellyfish
 
 
 def _tokens_vocabulario(vocabulario: dict) -> set[str]:
@@ -296,3 +297,104 @@ def normalizar_bairro_texto(texto: str) -> str:
     tokens = expandir_tokens_bairro(tokens, VOCABULARIO_BAIRRO)
 
     return reconstruir_texto_bairro(tokens)
+
+
+def extrair_prefixo(texto: str, n: int = 3) -> str:
+    """
+    Extrai os primeiros n caracteres de uma string.
+    Se a string tiver menos que n caracteres, retorna tudo.
+    """
+
+    if not isinstance(texto, str) or not texto:
+        return ""
+
+    texto = texto.strip()
+    return texto[:n]  # pode ajustar para upper() se preferir
+
+
+def tem_mesmo_prefixo(texto1: str, texto2: str, n: int = 3) -> bool:
+    """
+    Verifica se duas strings possuem o mesmo prefixo de tamanho n.
+    """
+    prefixo1 = extrair_prefixo(texto1, n)
+    prefixo2 = extrair_prefixo(texto2, n)
+
+    return prefixo1 == prefixo2
+
+
+def score_jaro_winkler(a: str, b: str) -> float:
+    """
+    Calcula o score de similaridade Jaro-Winkler entre duas strings.
+
+    Retorno:
+    float entre 0.0 e 1.0
+    """
+
+    if not isinstance(a, str) or not isinstance(b, str):
+        return 0.0
+
+    a = a.strip()
+    b = b.strip()
+
+    if not a or not b:
+        return 0.0
+
+    return jellyfish.jaro_winkler_similarity(a, b)
+
+
+def eh_similar_jaro_winkler(
+        a: str,
+        b: str,
+        fator: float
+) -> bool:
+    """
+    Decide se duas strings são similares com base
+    no score de Jaro-Winkler e um fator mínimo.
+    """
+
+    if not isinstance(fator, (int, float)):
+        raise ValueError(f"Fator inválido: {fator}")
+
+    score = score_jaro_winkler(a, b)
+
+    return score >= fator
+
+
+def group_similar_bairros(
+        bairros: List[str],
+        prefix_length: int = 3,
+        jaro_threshold: float = 0.88  # valor comum para nomes de lugares no Brasil
+) -> List[List[str]]:
+    if not bairros:
+        raise ValueError("A lista de bairros não pode estar vazia.")
+
+    # Remove espaços extras e normaliza (opcional, mas recomendado)
+    bairros = [b.strip() for b in bairros if b and b.strip()]
+
+    if not bairros:
+        return []
+
+    groups: List[List[str]] = []
+    current_group: List[str] = [bairros[0]]
+
+    for i in range(1, len(bairros)):
+        prev = current_group[-1]
+        curr = bairros[i]
+
+        # Critério de união: prefixo igual OU similaridade alta
+        sao_similares = (
+                tem_mesmo_prefixo(prev, curr, n=prefix_length) or
+                eh_similar_jaro_winkler(prev, curr, fator=jaro_threshold)
+        )
+
+        if sao_similares:
+            current_group.append(curr)
+        else:
+            groups.append(current_group)
+            current_group = [curr]
+
+    # Não esquecer o último grupo
+    if current_group:
+        groups.append(current_group)
+
+    return groups
