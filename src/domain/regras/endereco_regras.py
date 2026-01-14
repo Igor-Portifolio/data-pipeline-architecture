@@ -2,6 +2,8 @@ from src.domain.vocabulario.voc_endereco import *
 import re
 from typing import List, Any
 import jellyfish
+from typing import List, Optional
+
 
 
 def _tokens_vocabulario(vocabulario: dict) -> set[str]:
@@ -398,3 +400,71 @@ def group_similar_bairros(
         groups.append(current_group)
 
     return groups
+
+
+def escolher_melhor_match(
+    grupos: List[List[str]],
+    candidatos: List[str],
+    limiar_alto: float = 0.9
+) -> List[Optional[str]]:
+    """
+    Para cada grupo de variações, escolhe o melhor candidato possível
+    baseado em Jaro-Winkler.
+
+    Regras:
+    - Se grupo tem tamanho 1 → retorna esse valor
+    - Match exato → para imediatamente
+    - Score >= limiar_alto → para imediatamente
+    - Mantém ordem dos grupos
+    """
+
+    resultados: List[Optional[str]] = []
+
+    for grupo in grupos:
+
+        # --------------------------------------------------
+        # Caso trivial
+        # --------------------------------------------------
+        if not grupo:
+            resultados.append(None)
+            continue
+
+        if len(grupo) == 1:
+            resultados.append(grupo[0])
+            continue
+
+        melhor_score = -1.0
+        melhor_match = None
+
+        # --------------------------------------------------
+        # Cruzamento variações × candidatos
+        # --------------------------------------------------
+        for variante in grupo:
+            v_norm = variante.strip()
+
+            for candidato in candidatos:
+                c_norm = candidato.strip()
+
+                # Match exato → prioridade máxima
+                if v_norm == c_norm:
+                    melhor_match = candidato
+                    melhor_score = 1.0
+                    break
+
+                score = score_jaro_winkler(v_norm, c_norm)
+
+                if score > melhor_score:
+                    melhor_score = score
+                    melhor_match = candidato
+
+                # Match forte → para busca
+                if score >= limiar_alto:
+                    break
+
+            if melhor_score == 1.0 or melhor_score >= limiar_alto:
+                break
+
+        resultados.append(melhor_match)
+
+    return resultados
+

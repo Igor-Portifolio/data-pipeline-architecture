@@ -1,18 +1,49 @@
 
-
-Como armazenar os dados dos clientes (planilhas) da maneira mais profissional possivel e gratuita tendo em mente que
-extraio do google planilhas
-
-Como armazenar da melhor forma as planilhas dos estados considerando o seu formato
-site -> https://www.geoaplicada.com/dados/limites-de-bairros-do-brasil/
-
-funções de criações de data frames baseado no data frame principal
-    - separar de acordo com o estado (manter alguma forma de identificar aquela linha no df original: n de linha por exemplo)
-    - Colocar em ordem alphabetica
-    - Estudar (Jaro-Winkler | Damerau-Levenshtein) e testa-lo de forma a escolher a melhor opção ou fazer individualmente com a
-ideia que tinha pensado de verificar o numero de letras em comum e prefixos parecidos.
-    - Montar os blocos dentros dos estados das palavras parecidas
     - Fazer X-Check com a base de dados IBGE
+Pensar em como fazer isso de forma profissional, como é possivel fazer um cross check de uma lista de listas com nomes
+parecidos e errados  com a base de dados de forma profissional. Lembrando que antes de comparar deve-se filtrar pelo UF(Estado),
+Ou seja agora quero filtrar os bairros do RJ por exemplo.
+
+De forma a no final ter uma lista de mesma dimensao da lista de verificação com os nomes corretos.
+Nessa lista de verificação deve ter a versão correta dos nomes, se na lista de listas uma lista com apenas um nome, esse nome
+nao deve ser subjulgado a nova conferencia.
+
+Exemplo de Input e Output
+
+[
+    ["São João", "Sao Joao", "S. João"],
+    ["Bela Vista", "Bella Vista"]               ->(Cruzamento de dados)->
+    ["Quitandinha"]
+]
+
+[
+    ["São João"],
+    ["Bela Vista"]
+    [Quitandinha]
+]
+
+ou seja conferir quais dos nomes: "São João", "Sao Joao", "S. João" esta na base de dados. E assim por diante.
+
+pode me sugerir de como articular isso? E me de uma ideia de como pode ser o pipeline e quais funções devem ser criadas e em
+quais pastas.
+
+
+
+------------------------------------------
+
+
+Salvar no dataframe os nomes corrijidos de bairros e criar uma tabela no sqlite.
+
+df_saida = pd.DataFrame({
+                "row_id": df_estado.index,
+                "estado": estado,
+                "bairro_original": df_estado[coluna_bairro].values,
+                "bairro_normalizado": [""] * len(df_estado),
+            })
+
+
+
+
     - Criar Logs "inteligentes para verificação"
     - Função que ler o log e faz a substituição
 

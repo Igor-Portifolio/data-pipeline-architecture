@@ -1,4 +1,4 @@
-from src.domain.regras.age_and_date import *
+from src.domain.regras.idade_dadas_regras import *
 
 
 class AgeClassifier:

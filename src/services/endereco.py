@@ -1,4 +1,6 @@
 import pandas as pd
+from pandas.core.interchange.dataframe_protocol import DataFrame
+
 from src.domain.regras.endereco_regras import *
 
 
@@ -60,41 +62,12 @@ class NormalizadorEndereco:
                 "estado": estado,
                 "bairro_original": df_estado[coluna_bairro].values,
                 "bairro_normalizado": [""] * len(df_estado),
+                "necessita_revisao": [pd.NA] * len(df_estado),
+                "aprova": [True] * len(df_estado),
+
             })
 
             resultado[str(estado)] = df_saida.reset_index(drop=True)
 
         return resultado
 
-    def ordenar_coluna_alfa(self, coluna: str) -> list[str]:
-        """
-        Retorna uma lista com os valores da coluna em ordem alfabética.
-        """
-
-        if coluna not in self.df.columns:
-            raise KeyError(f"Coluna '{coluna}' não encontrada.")
-
-        # Converte para string para ordenação segura
-        valores = self.df[coluna].astype(str)
-
-        # Ordenação alfabética
-        return sorted(valores, key=lambda x: x.strip().upper())
-
-    def valores_unicos(self, lista: List[str]) -> List[str]:
-        """
-        Recebe uma lista de strings e retorna os valores únicos,
-        preservando a ordem de primeira ocorrência.
-        """
-
-        if not isinstance(lista, list):
-            return []
-
-        vistos = set()
-        resultado = []
-
-        for item in lista:
-            if item not in vistos:
-                vistos.add(item)
-                resultado.append(item)
-
-        return resultado

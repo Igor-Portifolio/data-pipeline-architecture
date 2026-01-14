@@ -3,6 +3,8 @@ from src.domain.vocabulario.voc_geografia import *
 from typing import Optional
 from src.infra.sql_writer import *
 from src.infra.readers import *
+from typing import List
+
 
 def preparar_df_ibge(
         df_ibge: pd.DataFrame
@@ -111,3 +113,41 @@ def ingestao_ibge_sqlite(
         table_name=table_name,
         modo="replace"
     )
+
+
+
+def listar_bairros_canonicos_sqlite(
+    db_path: str,
+    table_name: str,
+    query: str | None = None
+) -> List[str]:
+    """
+    Consulta o SQLite e retorna uma lista de bairros canônicos (únicos).
+
+    Camada: Service
+    """
+
+    df = consultar_df_sqlite(
+        db_path=db_path,
+        table_name=table_name,
+        query=query
+    )
+
+    if df.empty:
+        return []
+
+    if "NM_BAIRRO" not in df.columns:
+        raise KeyError("Coluna 'NM_BAIRRO' não encontrada no DataFrame.")
+
+    bairros = (
+        df["NM_BAIRRO"]
+        .dropna()
+        .astype(str)
+        .str.strip()
+    )
+
+    # remove duplicados preservando ordem
+    bairros_unicos = list(dict.fromkeys(bairros))
+
+    return bairros_unicos
+
