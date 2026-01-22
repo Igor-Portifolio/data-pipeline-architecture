@@ -18,7 +18,7 @@ class NormalizadorEndereco:
         if coluna not in self.df.columns:
             raise KeyError(f"Coluna '{coluna}' não encontrada.")
 
-        self.df[coluna] = self.df[coluna].apply(normalizar_endereco_texto)
+        self.df[coluna] = self.df[coluna].apply(pipeline_endereco_domain)
 
         return self.df
 
@@ -27,11 +27,12 @@ class NormalizadorEndereco:
         Aplica a normalização de bairro em uma coluna do DataFrame,
         sobrescrevendo os valores originais.
         """
+        
 
         if coluna not in self.df.columns:
             raise KeyError(f"Coluna '{coluna}' não encontrada.")
 
-        self.df[coluna] = self.df[coluna].apply(normalizar_bairro_texto)
+        self.df[coluna] = self.df[coluna].apply(pipeline_bairro_domain)
 
         return self.df
 

@@ -71,53 +71,55 @@ VOCABULARIO_ENDERECO = {
 }
 
 VOCABULARIO_BAIRRO = {
-    # Núcleos urbanos
-    "JD": "JARDIM",
-    "JARD": "JARDIM",
-    "JDIM": "JARDIM",
+    "JARDIM": {
+        "JD", "JARD", "JDIM", "JD."
+    },
 
-    "VL": "VILA",
-    "VLA": "VILA",
+    "VILA": {
+        "VL", "VLA", "VL."
+    },
 
-    "PQ": "PARQUE",
-    "PQUE": "PARQUE",
+    "PARQUE": {
+        "PQ", "PQUE", "PQ."
+    },
 
-    "CONJ": "CONJUNTO",
-    "CJ": "CONJUNTO",
+    "CONJUNTO": {
+        "CONJ", "CJ"
+    },
 
-    "LOT": "LOTEAMENTO",
-    "LOTEAM": "LOTEAMENTO",
+    "LOTEAMENTO": {
+        "LOT", "LOTEAM"
+    },
 
-    "RES": "RESIDENCIAL",
-    "RESID": "RESIDENCIAL",
+    "RESIDENCIAL": {
+        "RES", "RESID"
+    },
 
-    # Santos / religiosos
-    "STA": "SANTA",
-    "ST": "SANTO",
-    "STO": "SANTO",
-    "STA.": "SANTA",
-    "STO.": "SANTO",
+    "SANTA": {
+        "STA", "STA."
+    },
 
-    # Direções / regiões
-    "JD.": "JARDIM",
-    "VL.": "VILA",
-    "PQ.": "PARQUE",
+    "SANTO": {
+        "ST", "STO", "STO."
+    },
 
-    # Termos frequentes
-    "CENT": "CENTRO",
-    "CTR": "CENTRO",
+    "CENTRO": {
+        "CENT", "CTR"
+    },
 
-    "IND": "INDUSTRIAL",
-    "INDUST": "INDUSTRIAL",
+    "INDUSTRIAL": {
+        "IND", "INDUST"
+    },
 
-    # Condomínios
-    "COND": "CONDOMINIO",
-    "CONDOM": "CONDOMINIO",
+    "CONDOMINIO": {
+        "COND", "CONDOM"
+    },
 
-    # Outros
-    "HAB": "HABITACIONAL",
-    "HABIT": "HABITACIONAL",
+    "HABITACIONAL": {
+        "HAB", "HABIT"
+    },
 
-    "EST": "ESTANCIA",
-    "EST.": "ESTANCIA",
+    "ESTANCIA": {
+        "EST", "EST."
+    },
 }

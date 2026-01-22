@@ -76,7 +76,7 @@ def texto_tem_letras(texto: str) -> bool:
 
     return bool(re.search(r"[A-Za-zÀ-ÿ]", texto))
 
-def limpar_nome_unitario(texto: str):
+def pipeline_limpar_nome_domain(texto: str):
     """
     Dado um texto cru, retorna nome limpo ou pd.NA.
     """

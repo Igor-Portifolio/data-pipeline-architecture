@@ -5,7 +5,6 @@ import jellyfish
 from typing import List, Optional
 
 
-
 def _tokens_vocabulario(vocabulario: dict) -> set[str]:
     """
     Extrai todas as variações textuais do vocabulário.
@@ -171,7 +170,7 @@ def reconstruir_texto(tokens: List[Any]) -> str:
     return texto
 
 
-def normalizar_endereco_texto(texto: str) -> str:
+def pipeline_endereco_domain(texto: str) -> str:
     """
     Orquestra o pipeline de normalização de endereço.
     """
@@ -242,52 +241,7 @@ def tokenizar_bairro(texto: str, vocab: dict) -> List[str]:
     return resultado
 
 
-def expandir_tokens_bairro(tokens: List[str], vocab: dict) -> List[str]:
-    """
-    Expande tokens usando vocabulário explícito.
-    Ex: STA -> SANTA
-    """
-
-    if not isinstance(tokens, list):
-        return []
-
-    resultado = []
-
-    for token in tokens:
-        token_upper = token.upper()
-        expandido = token  # default: mantém
-
-        for forma_canonica, variacoes in vocab.items():
-            if token_upper in {v.upper() for v in variacoes}:
-                expandido = forma_canonica
-                break
-
-        resultado.append(expandido)
-
-    return resultado
-
-
-def reconstruir_texto_bairro(tokens: List[str]) -> str:
-    """
-    Reconstrói o texto do bairro a partir de tokens.
-    """
-
-    if not isinstance(tokens, list):
-        return ""
-
-    partes = [
-        str(token).strip()
-        for token in tokens
-        if isinstance(token, str) and token.strip()
-    ]
-
-    texto = " ".join(partes)
-
-    # segurança: normaliza espaços duplicados
-    return " ".join(texto.split())
-
-
-def normalizar_bairro_texto(texto: str) -> str:
+def pipeline_bairro_domain(texto: str) -> str:
     """
     Orquestra o pipeline de normalização de bairro.
     """
@@ -296,9 +250,9 @@ def normalizar_bairro_texto(texto: str) -> str:
         return ""
 
     tokens = tokenizar_bairro(texto, VOCABULARIO_BAIRRO)
-    tokens = expandir_tokens_bairro(tokens, VOCABULARIO_BAIRRO)
+    tokens = expandir_tokens_por_vocabulario(tokens, VOCABULARIO_BAIRRO)
 
-    return reconstruir_texto_bairro(tokens)
+    return reconstruir_texto(tokens)
 
 
 def extrair_prefixo(texto: str, n: int = 3) -> str:
@@ -403,9 +357,9 @@ def group_similar_bairros(
 
 
 def escolher_melhor_match(
-    grupos: List[List[str]],
-    candidatos: List[str],
-    limiar_alto: float = 0.9
+        grupos: List[List[str]],
+        candidatos: List[str],
+        limiar_alto: float = 0.9
 ) -> List[Optional[str]]:
     """
     Para cada grupo de variações, escolhe o melhor candidato possível
@@ -467,4 +421,3 @@ def escolher_melhor_match(
         resultados.append(melhor_match)
 
     return resultados
-

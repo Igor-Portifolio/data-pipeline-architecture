@@ -1,5 +1,6 @@
 import pandas as pd
 from src.domain.vocabulario.voc_geografia import *
+from src.domain.regras.endereco_regras import *
 from typing import Optional
 from src.infra.sql_writer import *
 from src.infra.readers import *
@@ -63,56 +64,7 @@ def adicionar_sigla_uf(
     return df_saida
 
 
-def ingestao_ibge_sqlite(
-        path_gpkg: str,
-        db_path: str,
-        table_name: str,
-        regiao_por_uf: Optional[dict] = None,
-) -> None:
-    """
-    Pipeline principal de ingestão do IBGE para SQLite.
 
-    Etapas:
-    1. Leitura do GPKG (Infra)
-    2. Preparação estrutural do DataFrame
-    3. Enriquecimento com SIGLA_UF (e região, se fornecido)
-    4. Persistência no SQLite (Infra)
-    """
-
-    # ======================================================
-    # 1️⃣ Ler GPKG (Infra)
-    # ======================================================
-    df_bruto = ler_arquivo_gpkg(path_gpkg)
-
-    # ======================================================
-    # 2️⃣ Preparar DataFrame (Service / Adapter)
-    # ======================================================
-    df_preparado = preparar_df_ibge(df_bruto)
-
-    # ======================================================
-    # 3️⃣ Enriquecer com SIGLA_UF
-    # ======================================================
-    df_enriquecido = adicionar_sigla_uf(df_preparado)
-
-    # ======================================================
-    # 4️⃣ Enriquecer com REGIÃO (opcional)
-    # ======================================================
-    if regiao_por_uf is not None:
-        if "SIGLA_UF" not in df_enriquecido.columns:
-            raise KeyError("Coluna 'SIGLA_UF' necessária para mapear região.")
-
-        df_enriquecido = df_enriquecido.copy()
-        df_enriquecido["REGIAO"] = df_enriquecido["SIGLA_UF"].map(regiao_por_uf)
-
-    # ======================================================
-    # 5️⃣ Persistir no SQLite (Infra)
-    # ======================================================
-    salvar_df_sqlite(
-        df=df_enriquecido,
-        db_path=db_path,
-        table_name=table_name,
-        modo="replace"
-    )
 
 
 
@@ -150,4 +102,59 @@ def listar_bairros_canonicos_sqlite(
     bairros_unicos = list(dict.fromkeys(bairros))
 
     return bairros_unicos
+
+
+def resolver_bairros_por_referencia_ibge(
+    bairros: List[str],
+    uf: str,
+    db_path: str,
+    table_name: str,
+) -> List[List[str]]:
+    """
+    Orquestra a resolução de bairros usando base canônica do IBGE.
+
+    Etapas:
+    1. Busca bairros canônicos do IBGE (SQLite)
+    2. Agrupa bairros similares da entrada
+    3. Resolve melhor match por grupo
+    """
+
+    if not bairros:
+        return []
+
+    # --------------------------------------------------
+    # 1️⃣ Buscar bairros canônicos do IBGE (por UF)
+    # --------------------------------------------------
+    query = f"SIGLA_UF = '{uf}'"
+
+    bairros_ibge = listar_bairros_canonicos_sqlite(
+        db_path=db_path,
+        table_name=table_name,
+        query=query
+    )
+
+    if not bairros_ibge:
+        # Sem referência → retorna grupos vazios
+        return [[b] for b in bairros]
+
+    # --------------------------------------------------
+    # 2️⃣ Agrupar bairros similares da entrada
+    # --------------------------------------------------
+    grupos = group_similar_bairros(
+        bairros=bairros,
+        prefix_length=3,
+        jaro_threshold=0.88
+    )
+
+    # --------------------------------------------------
+    # 3️⃣ Resolver melhor match por grupo
+    # --------------------------------------------------
+    resultado = escolher_melhor_match(
+        grupos=grupos,
+        candidatos=bairros_ibge,
+        limiar_alto=0.9
+    )
+
+    return resultado
+
 

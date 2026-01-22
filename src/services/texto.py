@@ -150,7 +150,7 @@ class Standard_text:
 
         self.df[coluna] = (
             self.df[coluna]
-            .apply(limpar_nome_unitario)
+            .apply(pipeline_limpar_nome_domain)
         )
 
         return self.df

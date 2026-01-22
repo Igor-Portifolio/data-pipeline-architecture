@@ -1,5 +1,4 @@
-import pandas as pd
-from src.domain.regras.basic_regras import *
+from src.core.basic_regras import *
 
 
 

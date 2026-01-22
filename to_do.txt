@@ -1,4 +1,22 @@
 
+Hora de parar e reorganizar, as coisas precisam ficar mais bem organizadasl, tentar acessar GPT Taissa.
+
+--------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     - Fazer X-Check com a base de dados IBGE
 Pensar em como fazer isso de forma profissional, como é possivel fazer um cross check de uma lista de listas com nomes
 parecidos e errados  com a base de dados de forma profissional. Lembrando que antes de comparar deve-se filtrar pelo UF(Estado),
@@ -26,6 +44,19 @@ ou seja conferir quais dos nomes: "São João", "Sao Joao", "S. João" esta na b
 
 pode me sugerir de como articular isso? E me de uma ideia de como pode ser o pipeline e quais funções devem ser criadas e em
 quais pastas.
+
+------------------------------------
+
+Falta a função:
+resolver_bairros_por_ibge -> Verificar em qual local é melhor, penso em services
+junta as funções -> buscar_barros_ibge_por_if e escolher_melhor_match
+retorna a lista de com os nomes escolhidos.
+
+--------------------------------
+
+
+depois pensar onde deve ficar os logs, ou seja a função que vai preencher o df e depois extrair para o SQL.
+
 
 
 
