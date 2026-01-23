@@ -58,3 +58,33 @@ def consultar_df_sqlite(
 
     return df
 
+
+def ler_csv_para_df(
+    path_csv: str,
+    sep: str = ",",
+    encoding: str = "utf-8"
+) -> pd.DataFrame:
+    """
+    Lê um arquivo CSV e retorna um DataFrame.
+
+    Responsabilidade:
+    - apenas leitura
+    - nenhuma validação semântica
+    - nenhuma transformação
+    """
+
+    if not isinstance(path_csv, str):
+        raise ValueError("O caminho do CSV deve ser uma string.")
+
+    try:
+        df = pd.read_csv(
+            path_csv,
+            sep=sep,
+            encoding=encoding
+        )
+    except Exception as e:
+        raise IOError(f"Erro ao ler CSV: {e}")
+
+    return df
+
+
