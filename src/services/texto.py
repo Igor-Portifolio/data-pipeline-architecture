@@ -226,19 +226,25 @@ class Standard_text:
             ],
         )
 
-    def remover_texto_apenas_numerico(self, coluna: str) -> pd.DataFrame:
+    def remover_valores_sem_letras(self, coluna: str) -> pd.DataFrame:
         """
-        Remove valores que contêm apenas números em uma coluna de texto.
+        Remove valores que, após normalização de nome,
+        não contêm nenhuma letra válida.
         """
 
         if coluna not in self.df.columns:
             raise KeyError(f"Coluna '{coluna}' não encontrada.")
 
-        def limpar(valor):
-            if isinstance(valor, str) and valor.strip().isdigit():
-                return pd.NA
-            return valor
-
-        self.df[coluna] = self.df[coluna].apply(limpar)
+        self.df[coluna] = self.df[coluna].apply(
+            lambda valor: (
+                pd.NA
+                if isinstance(valor, str)
+                   and normalizar_caracteres_nome(valor) == ""
+                else valor
+            )
+        )
 
         return self.df
+
+
+

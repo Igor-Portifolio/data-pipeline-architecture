@@ -7,7 +7,7 @@ titulos_profissoes = [
             "sr", "sra", "senhor", "senhora",
             "comerciante",
             "adv", "advogado", "advogada",
-            "administrador", "administradora",
+            "administrador", "administradora","adm"
         ]
 
 RELACOES_FAMILIARES = {

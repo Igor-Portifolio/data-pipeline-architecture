@@ -50,3 +50,46 @@ def aplicar_revisao_manual(
             ] = valor
 
     return df_saida
+
+def aplicar_revisao_nomes(
+        df_original: pd.DataFrame,
+        df_logs: pd.DataFrame,
+        coluna_nome: str
+) -> pd.DataFrame:
+    """
+    Aplica revisões de nomes ao DataFrame original com base
+    no DataFrame de logs de revisão.
+
+    Atualiza somente quando valor_revisado é válido (não vazio).
+    """
+
+    if not isinstance(df_original, pd.DataFrame):
+        raise TypeError("df_original deve ser um DataFrame")
+
+    if not isinstance(df_logs, pd.DataFrame):
+        raise TypeError("df_logs deve ser um DataFrame")
+
+    if coluna_nome not in df_original.columns:
+        raise KeyError(f"Coluna '{coluna_nome}' não encontrada no df_original")
+
+    for col in ["id_registro", "valor_revisado"]:
+        if col not in df_logs.columns:
+            raise KeyError(f"Coluna '{col}' não encontrada no df_logs")
+
+    df_final = df_original.copy()
+
+    for _, row in df_logs.iterrows():
+        idx = row["id_registro"]
+        valor_revisado = row["valor_revisado"]
+
+        # 🚫 Não aplica se vazio / nulo
+        if not isinstance(valor_revisado, str):
+            continue
+
+        if valor_revisado.strip() == "":
+            continue
+
+        if idx in df_final.index:
+            df_final.at[idx, coluna_nome] = valor_revisado.strip()
+
+    return df_final

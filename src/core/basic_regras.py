@@ -6,15 +6,13 @@ from typing import Optional
 from typing import List
 
 
-
-
 def coerce_value(valor: Any):
     """
     Tenta converter um valor para int, float ou datetime.
     Fallback: string normalizada.
     """
 
-    if pd.isna(valor):
+    if valor is None:
         return pd.NA
 
     # já numérico
@@ -76,32 +74,30 @@ def coerce_value(valor: Any):
 def trim_whitespace_value(valor: Any):
     """
     Remove whitespace periférico e invisível de strings ou listas de strings.
+    Não remove elementos da estrutura original.
     """
 
-    if pd.isna(valor):
+    # NA explícito (escalares)
+    if valor is None or valor is pd.NA:
         return valor
 
     # ======================================================
     # Caso 1 — string
     # ======================================================
     if isinstance(valor, str):
-        texto = valor
-
         # normaliza whitespace invisível (inclui \u00A0)
-        texto = re.sub(r"[\s\u00A0]+", " ", texto)
-
+        texto = re.sub(r"[\s\u00A0]+", " ", valor)
         return texto.strip()
 
     # ======================================================
-    # Caso 2 — lista de strings
+    # Caso 2 — lista (preserva cardinalidade)
     # ======================================================
     if isinstance(valor, list):
-        return [
-            trim_whitespace_value(v)
-            for v in valor
-            if not (isinstance(v, str) and v.strip() == "")
-        ]
+        return [trim_whitespace_value(v) for v in valor]
 
+    # ======================================================
+    # Caso 3 — qualquer outro tipo (pass-through)
+    # ======================================================
     return valor
 
 
@@ -130,10 +126,10 @@ def normalizar_pontuacao_texto(texto: str) -> Optional[str]:
     texto = texto.replace("_", " ")
 
     # ======================================================
-    # 3️⃣ Remove apóstrofo no início ou fim da palavra
+    # 3️⃣ Remove apóstrofo no início ou fim da string
     # ======================================================
-    texto = re.sub(r"\b'+", "", texto)
-    texto = re.sub(r"'+\b", "", texto)
+    texto = re.sub(r"^'+", "", texto)
+    texto = re.sub(r"'+$", "", texto)
 
     # ======================================================
     # 4️⃣ Normaliza espaços
@@ -176,5 +172,3 @@ def valores_unicos(lista: List[str]) -> List[str]:
             resultado.append(item)
 
     return resultado
-
-
