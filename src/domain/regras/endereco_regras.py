@@ -90,8 +90,10 @@ def expandir_tokens_por_vocabulario(
         vocabulario: dict
 ) -> List[str]:
     """
-    Substitui tokens conhecidos por suas formas canônicas,
-    preservando ordem e quantidade.
+    Substitui tokens conhecidos por suas formas canônicas
+    usando um vocabulário hierárquico (ex: VOCABULARIO_ENDERECO).
+
+    Preserva ordem e quantidade.
     """
 
     if not isinstance(tokens, list):
@@ -100,19 +102,28 @@ def expandir_tokens_por_vocabulario(
     tokens_padronizados = []
 
     for token in tokens:
-        token_upper = token.upper()
+        if not isinstance(token, str):
+            tokens_padronizados.append(token)
+            continue
+
+        token_lower = token.lower()
         substituido = False
 
-        for forma_canonica, conjunto_tokens in vocabulario.items():
-            if token_upper in conjunto_tokens:
-                tokens_padronizados.append(forma_canonica)
-                substituido = True
+        # percorre categorias → formas canônicas → variações
+        for _, grupo in vocabulario.items():
+            for forma_canonica, variacoes in grupo.items():
+                if token_lower in variacoes:
+                    tokens_padronizados.append(forma_canonica)
+                    substituido = True
+                    break
+            if substituido:
                 break
 
         if not substituido:
             tokens_padronizados.append(token)
 
     return tokens_padronizados
+
 
 
 def reordenar_voc_dado_simples(tokens: List[Any]) -> List[Any]:
@@ -182,7 +193,7 @@ def pipeline_endereco_domain(texto: str) -> str:
     tokens = expandir_tokens_por_vocabulario(tokens, VOCABULARIO_ENDERECO)
     tokens = reordenar_voc_dado_simples(tokens)
 
-    return reconstruir_texto(tokens)
+    return reconstruir_texto(tokens).upper()
 
 
 def tokenizar_bairro(texto: str, vocab: dict) -> List[str]:
@@ -252,7 +263,7 @@ def pipeline_bairro_domain(texto: str) -> str:
     tokens = tokenizar_bairro(texto, VOCABULARIO_BAIRRO)
     tokens = expandir_tokens_por_vocabulario(tokens, VOCABULARIO_BAIRRO)
 
-    return reconstruir_texto(tokens)
+    return reconstruir_texto(tokens).upper()
 
 
 def extrair_prefixo(texto: str, n: int = 3) -> str:

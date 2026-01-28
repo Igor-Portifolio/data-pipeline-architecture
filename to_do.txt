@@ -3,3 +3,8 @@ testar funções -> 1
 montar pipeline basico cleaning -> 2
 montar pipeline nomes -> 3
 terminar funções do pipeline de endereço, -> 4
+
+-------
+
+Estou no pipeline do bairro.
+Funcao de tokenizar bairros simplesmente nao faz sentido, deve-se rever isso.
