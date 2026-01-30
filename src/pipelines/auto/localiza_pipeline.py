@@ -1,4 +1,4 @@
-from src.services.endereco import *
+from src.services.geral_subjects.endereco import *
 
 def endereco_pipeline(
         df: pd.DataFrame,

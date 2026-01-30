@@ -200,7 +200,8 @@ def tokenizar_bairro(texto: str, vocab: dict) -> List[str]:
     """
     Tokenização tolerante:
     separa tokens colados APENAS quando começam
-    com abreviação conhecida no vocabulário.
+    com abreviação conhecida no vocabulário
+    e NÃO são exatamente uma forma canônica.
     """
 
     if not isinstance(texto, str):
@@ -212,8 +213,9 @@ def tokenizar_bairro(texto: str, vocab: dict) -> List[str]:
         return []
 
     # --------------------------------------------------
-    # 1️⃣ Extrair todos os prefixos válidos do vocabulário
+    # 1️⃣ Extrair formas canônicas e prefixos válidos
     # --------------------------------------------------
+    formas_canonicas = {k.upper() for k in vocab.keys()}
     prefixos_validos = set()
 
     for _, variacoes in vocab.items():
@@ -233,6 +235,11 @@ def tokenizar_bairro(texto: str, vocab: dict) -> List[str]:
     # 3️⃣ Separação tolerante controlada
     # --------------------------------------------------
     for token in tokens:
+        # 🔒 REGRA NOVA: se já é forma canônica, mantém
+        if token in formas_canonicas:
+            resultado.append(token)
+            continue
+
         separado = False
 
         for prefixo in prefixos_validos:

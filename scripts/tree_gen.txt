@@ -1,0 +1,6 @@
+tree /A /F
+
+
+tree /A
+
+tree C:\projetos_solve\scripts_geral\src /A /F

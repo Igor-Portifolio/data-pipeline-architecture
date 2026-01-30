@@ -1,11 +1,4 @@
-import pandas as pd
-from src.domain.vocabulario.voc_geografia import *
-from src.domain.regras.endereco_regras import *
-from typing import Optional
-from src.infra.sql_writer import *
-from src.infra.readers import *
-from src.services.ibge_service import *
-from typing import List
+from src.services.geral_subjects.ibge_service import *
 
 
 def ingestao_ibge_sqlite(

@@ -70,56 +70,56 @@ VOCABULARIO_ENDERECO = {
     "EXCECAO": EXCECOES,
 }
 
+# ---------------------------------------------------------
+# TIPOLOGIA URBANA
+# ---------------------------------------------------------
+TIPOLOGIAS_URBANAS = {
+    "JARDIM": {"jd", "jard", "jdim", "jd."},
+    "VILA": {"vl", "vla", "vl."},
+    "PARQUE": {"pq", "pque", "pq."},
+    "LOTEAMENTO": {"lot", "loteam"},
+    "ESTANCIA": {"est", "est."},
+}
+
+# ---------------------------------------------------------
+# ENTIDADES HABITACIONAIS / INSTITUCIONAIS
+# ---------------------------------------------------------
+ENTIDADES_URBANAS = {
+    "CONJUNTO": {"conj", "cj"},
+    "CONDOMINIO": {"cond", "condom"},
+}
+
+# ---------------------------------------------------------
+# CLASSIFICACAO FUNCIONAL
+# ---------------------------------------------------------
+CLASSIFICACOES_FUNCIONAIS = {
+    "RESIDENCIAL": {"res", "resid"},
+    "HABITACIONAL": {"hab", "habit"},
+    "INDUSTRIAL": {"ind", "indust"},
+}
+
+# ---------------------------------------------------------
+# MARCADORES GEOGRAFICOS / ADMINISTRATIVOS
+# ---------------------------------------------------------
+MARCADORES_GEOGRAFICOS = {
+    "CENTRO": {"cent", "ctr"},
+}
+
+# ---------------------------------------------------------
+# QUALIFICADORES RELIGIOSOS / CULTURAIS
+# ---------------------------------------------------------
+QUALIFICADORES_RELIGIOSOS = {
+    "SANTA": {"sta", "sta."},
+    "SANTO": {"st", "sto", "sto."},
+}
+
+# ---------------------------------------------------------
+# AGRUPAMENTO GERAL (ÚTIL PARA PIPELINE / BUSCA)
+# ---------------------------------------------------------
 VOCABULARIO_BAIRRO = {
-    "JARDIM": {
-        "JD", "JARD", "JDIM", "JD."
-    },
-
-    "VILA": {
-        "VL", "VLA", "VL."
-    },
-
-    "PARQUE": {
-        "PQ", "PQUE", "PQ."
-    },
-
-    "CONJUNTO": {
-        "CONJ", "CJ"
-    },
-
-    "LOTEAMENTO": {
-        "LOT", "LOTEAM"
-    },
-
-    "RESIDENCIAL": {
-        "RES", "RESID"
-    },
-
-    "SANTA": {
-        "STA", "STA."
-    },
-
-    "SANTO": {
-        "ST", "STO", "STO."
-    },
-
-    "CENTRO": {
-        "CENT", "CTR"
-    },
-
-    "INDUSTRIAL": {
-        "IND", "INDUST"
-    },
-
-    "CONDOMINIO": {
-        "COND", "CONDOM"
-    },
-
-    "HABITACIONAL": {
-        "HAB", "HABIT"
-    },
-
-    "ESTANCIA": {
-        "EST", "EST."
-    },
+    "TIPOLOGIA": TIPOLOGIAS_URBANAS,
+    "ENTIDADE": ENTIDADES_URBANAS,
+    "CLASSIFICACAO": CLASSIFICACOES_FUNCIONAIS,
+    "MARCADOR": MARCADORES_GEOGRAFICOS,
+    "QUALIFICADOR": QUALIFICADORES_RELIGIOSOS,
 }

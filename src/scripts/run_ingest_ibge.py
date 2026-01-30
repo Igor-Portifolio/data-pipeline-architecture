@@ -1,4 +1,3 @@
-from src.services.ibge_service import *
 from pathlib import Path
 
 dir = Path(__file__).parent.parent.parent

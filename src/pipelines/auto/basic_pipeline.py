@@ -1,4 +1,4 @@
-from src.services.basic import *
+from src.services.geral_subjects.basic import *
 
 
 def basic_pipeline(df: pd.DataFrame) -> pd.DataFrame:

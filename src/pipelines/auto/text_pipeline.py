@@ -1,6 +1,6 @@
-from src.services.texto import *
+from src.services.geral_subjects.texto import *
 from src.infra.export_logs import *
-from src.pipelines.manuais.revisoes import *
+from src.services.geral_revs.revisoes import *
 
 
 def text_basic_pipeline(df: pd.DataFrame) -> pd.DataFrame:
@@ -104,10 +104,10 @@ def text_names_part_tree_pipeline(
         return df
 
     # Aplica revisões
-    df_final = aplicar_revisao_nomes(
+    df_final = aplicar_revisao_manual(
         df_original=df,
-        df_logs=df_logs,
-        coluna_nome=coluna
+        df_revisao=df_logs,
+        nome_coluna_df=coluna
     )
 
     return df_final

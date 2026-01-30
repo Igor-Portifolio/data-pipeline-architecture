@@ -1,4 +1,4 @@
-from src.core.basic_regras import *
+from src.Support.basic_regras import *
 
 
 

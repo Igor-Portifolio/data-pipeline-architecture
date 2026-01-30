@@ -276,77 +276,169 @@ from src.domain.regras.endereco_regras import *
 # def test_pipeline_endereco_domain_ordem_preservada_quando_nao_simples():
 #     resultado = pipeline_endereco_domain("rua das flores 123 ap 45")
 #     assert resultado == "RUA DAS FLORES 123 APARTAMENTO 45"
+#
+#
+# def test_tokenizar_bairro_tipo_invalido():
+#     assert tokenizar_bairro(123, VOCABULARIO_BAIRRO) == []
+#     assert tokenizar_bairro(None, VOCABULARIO_BAIRRO) == []
+#
+#
+# def test_tokenizar_bairro_string_vazia():
+#     assert tokenizar_bairro("", VOCABULARIO_BAIRRO) == []
+#     assert tokenizar_bairro("   ", VOCABULARIO_BAIRRO) == []
+#
+#
+# def test_tokenizar_bairro_simples_sem_prefixo():
+#     texto = "CENTRO"
+#     esperado = ["CENTRO"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_prefixo_colado_separa():
+#     texto = "JDPAULISTA"
+#     esperado = ["JD", "PAULISTA"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_prefixo_colado_com_espaco():
+#     texto = "JD PAULISTA"
+#     esperado = ["JD", "PAULISTA"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_nao_separa_se_resto_nao_for_letra():
+#     texto = "JD123"
+#     esperado = ["JD123"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_prefixo_exato_nao_separa():
+#     texto = "JD"
+#     esperado = ["JD"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_prioriza_prefixo_maior():
+#     texto = "STAPAULO"
+#     esperado = ["STA", "PAULO"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_multiplos_tokens():
+#     texto = "JDPAULISTA VL NOVA"
+#     esperado = ["JD", "PAULISTA", "VL", "NOVA"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_mantem_tokens_desconhecidos():
+#     texto = "BAIRRO X"
+#     esperado = ["BAIRRO", "X"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+#
+# def test_tokenizar_bairro_normaliza_para_maiusculas():
+#     texto = "jdPaulista"
+#     esperado = ["JD", "PAULISTA"]
+#
+#     assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+#
+
+def test_pipeline_bairro_domain_retorna_string_vazia_para_none():
+    assert pipeline_bairro_domain(None) == ""
 
 
-def test_tokenizar_bairro_tipo_invalido():
-    assert tokenizar_bairro(123, VOCABULARIO_BAIRRO) == []
-    assert tokenizar_bairro(None, VOCABULARIO_BAIRRO) == []
+def test_pipeline_bairro_domain_retorna_string_vazia_para_tipo_invalido():
+    assert pipeline_bairro_domain(123) == ""
+    assert pipeline_bairro_domain([]) == ""
+    assert pipeline_bairro_domain({}) == ""
 
 
-def test_tokenizar_bairro_string_vazia():
-    assert tokenizar_bairro("", VOCABULARIO_BAIRRO) == []
-    assert tokenizar_bairro("   ", VOCABULARIO_BAIRRO) == []
+def test_pipeline_bairro_domain_expande_jardim():
+    texto = "jd paulista"
+    esperado = "JARDIM PAULISTA"
+
+    assert pipeline_bairro_domain(texto) == esperado
 
 
-def test_tokenizar_bairro_simples_sem_prefixo():
-    texto = "CENTRO"
-    esperado = ["CENTRO"]
+def test_pipeline_bairro_domain_expande_vila():
+    texto = "vl maria"
+    esperado = "VILA MARIA"
 
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
-
-
-def test_tokenizar_bairro_prefixo_colado_separa():
-    texto = "JDPAULISTA"
-    esperado = ["JD", "PAULISTA"]
-
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+    assert pipeline_bairro_domain(texto) == esperado
 
 
-def test_tokenizar_bairro_prefixo_colado_com_espaco():
-    texto = "JD PAULISTA"
-    esperado = ["JD", "PAULISTA"]
+def test_pipeline_bairro_domain_expande_parque():
+    texto = "pq das rosas"
+    esperado = "PARQUE DAS ROSAS"
 
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
-
-
-def test_tokenizar_bairro_nao_separa_se_resto_nao_for_letra():
-    texto = "JD123"
-    esperado = ["JD123"]
-
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+    assert pipeline_bairro_domain(texto) == esperado
 
 
-def test_tokenizar_bairro_prefixo_exato_nao_separa():
-    texto = "JD"
-    esperado = ["JD"]
+def test_pipeline_bairro_domain_expande_com_pontuacao():
+    texto = "jd europa"
+    esperado = "JARDIM EUROPA"
 
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
-
-
-def test_tokenizar_bairro_prioriza_prefixo_maior():
-    texto = "STAPAULO"
-    esperado = ["STA", "PAULO"]
-
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+    assert pipeline_bairro_domain(texto) == esperado
 
 
-def test_tokenizar_bairro_multiplos_tokens():
-    texto = "JDPAULISTA VL NOVA"
-    esperado = ["JD", "PAULISTA", "VL", "NOVA"]
+def test_pipeline_bairro_domain_expande_multiplos_tokens():
+    texto = "jd res hab"
+    esperado = "JARDIM RESIDENCIAL HABITACIONAL"
 
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
-
-
-def test_tokenizar_bairro_mantem_tokens_desconhecidos():
-    texto = "BAIRRO X"
-    esperado = ["BAIRRO", "X"]
-
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+    assert pipeline_bairro_domain(texto) == esperado
 
 
-def test_tokenizar_bairro_normaliza_para_maiusculas():
-    texto = "jdPaulista"
-    esperado = ["JD", "PAULISTA"]
+def test_pipeline_bairro_domain_expande_santa():
+    texto = "vl sta maria"
+    esperado = "VILA SANTA MARIA"
 
-    assert tokenizar_bairro(texto, VOCABULARIO_BAIRRO) == esperado
+    assert pipeline_bairro_domain(texto) == esperado
+
+
+def test_pipeline_bairro_domain_expande_santo():
+    texto = "pq sto antonio"
+    esperado = "PARQUE SANTO ANTONIO"
+
+    assert pipeline_bairro_domain(texto) == esperado
+
+
+def test_pipeline_bairro_domain_expande_industrial():
+    texto = "pq ind"
+    esperado = "PARQUE INDUSTRIAL"
+
+    assert pipeline_bairro_domain(texto) == esperado
+
+
+def test_pipeline_bairro_domain_nao_altera_tokens_desconhecidos():
+    texto = "bairro aleatorio xpto"
+    esperado = "BAIRRO ALEATORIO XPTO"
+
+    assert pipeline_bairro_domain(texto) == esperado
+
+
+def test_pipeline_bairro_domain_normaliza_para_uppercase():
+    texto = "Vl Maria"
+    esperado = "VILA MARIA"
+
+    assert pipeline_bairro_domain(texto) == esperado
+
+
+def test_pipeline_bairro_domain_e_idempotente_para_texto_normalizado():
+    texto = "JARDIM PAULISTA"
+
+    assert pipeline_bairro_domain(texto) == texto
+
+
+def test_pipeline_bairro_domain_idempotencia_com_frase_complexa():
+    texto = "PARQUE RESIDENCIAL SANTO ANTONIO"
+
+    assert pipeline_bairro_domain(texto) == texto
 

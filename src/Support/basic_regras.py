@@ -139,36 +139,4 @@ def normalizar_pontuacao_texto(texto: str) -> Optional[str]:
     return texto if texto else None
 
 
-def ordenar_coluna_alfa(df: pd.DataFrame, coluna: str) -> list[str]:
-    """
-    Retorna uma lista com os valores da coluna em ordem alfabética.
-    """
 
-    if coluna not in df.columns:
-        raise KeyError(f"Coluna '{coluna}' não encontrada.")
-
-    # Converte para string para ordenação segura
-    valores = df[coluna].astype(str)
-
-    # Ordenação alfabética
-    return sorted(valores, key=lambda x: x.strip().upper())
-
-
-def valores_unicos(lista: List[str]) -> List[str]:
-    """
-    Recebe uma lista de strings e retorna os valores únicos,
-    preservando a ordem de primeira ocorrência.
-    """
-
-    if not isinstance(lista, list):
-        return []
-
-    vistos = set()
-    resultado = []
-
-    for item in lista:
-        if item not in vistos:
-            vistos.add(item)
-            resultado.append(item)
-
-    return resultado
