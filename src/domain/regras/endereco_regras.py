@@ -377,7 +377,7 @@ def group_similar_bairros(
 def escolher_melhor_match(
         grupos: List[List[str]],
         candidatos: List[str],
-        limiar_alto: float = 0.9
+        limiar_alto: float = 0.92
 ) -> List[Optional[str]]:
     """
     Para cada grupo de variações, escolhe o melhor candidato possível
