@@ -2,6 +2,11 @@ from src.services.geral_subjects.endereco import *
 from src.infra.db.loader import *
 from src.infra.db.connection import *
 from src.infra.db.executor import *
+from src.services.geral_subjects.ibge_service import *
+
+# Diretorio da db
+dir = Path(__file__).parent.parent.parent
+db_path  = dir / "data" / "store" / "memory.db"
 
 
 def endereco_pipeline(
@@ -70,3 +75,36 @@ def sql_bairros_unicos_alfa(
         raise RuntimeError("Query final não retornou a coluna 'bairro'.")
 
     return [str(x) for x in out["bairro"].tolist()]
+
+
+def bairro_part_one_pipeline(
+        df: pd.DataFrame,
+        coluna: str
+) -> pd.DataFrame:
+    """
+      Pipeline de normalização de bairros para uma coluna específica.
+    """
+
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("Entrada deve ser um pandas DataFrame")
+
+    normalizador = NormalizadorEndereco(df)
+
+    normalizador.normalizar_coluna_bairro(coluna)
+
+    return normalizador.df
+
+
+def bairro_part_two_pipeline(
+        df: pd.DataFrame,
+        uf: str,
+) -> List[Optional[str]]:
+
+    lista = sql_bairros_unicos_alfa(df, db_path, uf)
+    lista = group_similar_bairros(lista, jaro_threshold=0.9)
+
+    return lista
+
+
+
+

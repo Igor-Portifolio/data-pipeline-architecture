@@ -1,4 +1,5 @@
 from pathlib import Path
+from src.pipelines.manuais.ingestao_ibge import *
 
 dir = Path(__file__).parent.parent.parent
 arquivo_path_gpkg = dir / "data" / "raw" / "ref" /"BR_bairros_CD2022.gpkg"
