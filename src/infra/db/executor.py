@@ -5,22 +5,17 @@ import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping, Optional, Sequence, Tuple, Union
-
-try:
-    import pandas as pd  # type: ignore
-except Exception:  # pragma: no cover
-    pd = None  # type: ignore
-
-from infra.connection import connect_sqlite, transaction
+import pandas as pd
+from src.infra.db.connection import connect_sqlite, transaction
 
 
-SqlParams = Union[Sequence[Any], Mapping[str, Any]]
-SqlitePath = Union[str, Path]
+SqlParams = Union[Sequence[Any], Mapping[str, Any]]  # modos de inserir dados
+SqlitePath = Union[str, Path]  # Flexibilidade no caminho
 
 
 @dataclass(frozen=True)
 class MaterializeReport:
-    name: str
+    name: str  # Nome do Objeto materializado no Banco
     kind: str  # "table" | "view"
     mode: str  # "replace" | "fail"
     rowcount: Optional[int]
@@ -53,7 +48,7 @@ def exec_sql_file(
     """
     script = Path(sql_path).read_text(encoding="utf-8")
 
-    conn = connect_sqlite(db_path, pragmas=pragmas)
+    conn = connect_sqlite(db_path, pragmas=pragmas) # Uso da extrutura padronizada
     try:
         if params is None:
             if transactional:

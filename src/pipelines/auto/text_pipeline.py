@@ -1,6 +1,6 @@
 from src.services.geral_subjects.texto import *
-from src.infra.export_logs import *
-from src.services.geral_revs.revisoes import *
+from src.infra.io.writers import *
+from src.infra.io.paths import *
 
 
 def text_basic_pipeline(df: pd.DataFrame) -> pd.DataFrame:
@@ -68,19 +68,15 @@ def text_names_part_two_pipeline(
     )
 
     # 2️⃣ Exporta fila de revisão
-    exportar_fila_revisao_nomes(
-        df_revisao=df_revisao,
-        path_saida=path_saida,
-        formato="csv"
-    )
+    salvar_df_para_csv(df, logs_dir)
 
     return df
 
 
 def text_names_part_tree_pipeline(
-    df: pd.DataFrame,
-    coluna: str,
-    path_saida: str
+        df: pd.DataFrame,
+        coluna: str,
+        path_saida: str
 ) -> pd.DataFrame:
     """
     Pipeline – Parte 3 de nomes próprios:

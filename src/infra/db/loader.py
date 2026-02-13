@@ -5,13 +5,8 @@ import re
 import sqlite3
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
-
-try:
-    import pandas as pd  # type: ignore
-except Exception:  # pragma: no cover
-    pd = None  # type: ignore
-
-from infra.connection import connect_sqlite, transaction, execute_many
+from src.infra.db.connection import connect_sqlite, transaction, execute_many
+import pandas as pd
 
 
 @dataclass(frozen=True)
@@ -23,13 +18,13 @@ class SimpleLoadReport:
 
 
 def df_to_sqlite(
-    df: "pd.DataFrame",
-    db_path: str,
-    table: str,
-    *,
-    mode: str = "replace",   # "replace" | "append"
-    chunksize: int = 50_000,
-    pragmas: Optional[Dict[str, Any]] = None,
+        df: "pd.DataFrame",
+        db_path: str,
+        table: str,
+        *,
+        mode: str = "replace",  # "replace" | "append"
+        chunksize: int = 50_000,
+        pragmas: Optional[Dict[str, Any]] = None,
 ) -> SimpleLoadReport:
     """
     Minimal pipeline:
@@ -38,13 +33,12 @@ def df_to_sqlite(
       - create table from df columns
       - bulk insert df
     """
-    _require_pandas()
-    if mode not in {"replace", "append"}:
+    if mode not in {"replace", "append"}:  # proteção contra uso errado do mode
         raise ValueError("mode must be 'replace' or 'append'")
 
-    table = _safe_name(table)
-    df2 = _prepare_df(df)
-    cols = [ _safe_name(c) for c in df2.columns.tolist() ]
+    table = _safe_name(table) # Proteções
+    df2 = _prepare_df(df)  # Proteções
+    cols = [_safe_name(c) for c in df2.columns.tolist()] # Proteções
 
     # rename columns if needed
     if cols != df2.columns.tolist():
@@ -52,9 +46,9 @@ def df_to_sqlite(
 
     conn = connect_sqlite(db_path, pragmas=pragmas)
     try:
-        with transaction(conn, mode="IMMEDIATE"):
+        with transaction(conn, mode="IMMEDIATE"):  # Ideal para batch
             if mode == "replace":
-                conn.execute(f'DROP TABLE IF EXISTS "{table}"')
+                conn.execute(f'DROP TABLE IF EXISTS "{table}"')  # Se ja tiver uma table apaga ela
 
             ensure_table_from_df(conn, table, df2)
             insert_df(conn, table, df2, chunksize=chunksize)
@@ -74,7 +68,6 @@ def ensure_table_from_df(conn: sqlite3.Connection, table: str, df: "pd.DataFrame
       - datetime -> TEXT
       - everything else -> TEXT
     """
-    _require_pandas()
     cols = df.columns.tolist()
 
     dtype_map = {}
@@ -87,17 +80,16 @@ def ensure_table_from_df(conn: sqlite3.Connection, table: str, df: "pd.DataFrame
 
 
 def insert_df(
-    conn: sqlite3.Connection,
-    table: str,
-    df: "pd.DataFrame",
-    *,
-    chunksize: int = 50_000,
+        conn: sqlite3.Connection,
+        table: str,
+        df: "pd.DataFrame",
+        *,
+        chunksize: int = 50_000,
 ) -> int:
     """
     Bulk insert DataFrame (assumes table exists).
     Caller controls transaction scope.
     """
-    _require_pandas()
 
     if df.shape[0] == 0:
         return 0
@@ -123,15 +115,11 @@ def insert_df(
 
 # ----------------- internal helpers -----------------
 
-def _require_pandas() -> None:
-    if pd is None:
-        raise RuntimeError("pandas is required for loader.py (install pandas).")
-
 
 def _prepare_df(df: "pd.DataFrame") -> "pd.DataFrame":
     df2 = df.copy()
     # SQLite wants Python None (not NaN)
-    df2 = df2.where(pd.notnull(df2), None)
+    df2 = df2.where(pd.notnull(df2), None)  # coloca None para valores nulos
     return df2
 
 

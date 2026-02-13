@@ -1,9 +1,11 @@
+'''
+Responsabilidade: ler arquivos e devolver dados em estrutura padrão (ex.: DataFrame).
+'''
 from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 import sqlite3
 from typing import Optional
-
 
 def ler_arquivo_gpkg(path) -> pd.DataFrame:
     """
@@ -59,8 +61,8 @@ def consultar_df_sqlite(
     return df
 
 
-def ler_csv_para_df(
-    path_csv: str,
+def ler_csv_clinte_para_df(
+    path_csv: str | Path,
     sep: str = ",",
     encoding: str = "utf-8"
 ) -> pd.DataFrame:
@@ -73,18 +75,19 @@ def ler_csv_para_df(
     - nenhuma transformação
     """
 
-    if not isinstance(path_csv, str):
-        raise ValueError("O caminho do CSV deve ser uma string.")
+    path = Path(path_csv)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
 
     try:
         df = pd.read_csv(
-            path_csv,
+            path,
             sep=sep,
             encoding=encoding
         )
-    except Exception as e:
-        raise IOError(f"Erro ao ler CSV: {e}")
+    except pd.errors.ParserError as e:
+        raise ValueError(f"Erro de parsing no CSV: {e}")
 
     return df
-
 

@@ -1,0 +1,44 @@
+DEFAULT_PRAGMAS:
+Define o comportamento padrão do banco. É a “configuração mínima segura” que garante integridade (foreign_keys), estabilidade contra lock (busy_timeout), equilíbrio entre segurança e performance (synchronous) e uso eficiente de memória (temp_store, cache_size). Centraliza decisões técnicas do motor do SQLite.
+
+
+---
+
+connect_sqlite:
+Função principal de criação da conexão. Garante que o diretório exista, abre o banco com parâmetros controlados, aplica configurações (PRAGMAs) e retorna a conexão pronta para uso. É o ponto único de entrada para acessar o banco, padronizando comportamento e evitando conexões inconsistentes espalhadas pelo código.
+
+---
+
+apply_pragmas:
+Responsável por aplicar todas as configurações internas do SQLite na conexão recém-criada. Centraliza a aplicação de PRAGMA, evitando repetição e mantendo controle sobre como o banco é configurado. Garante que cada conexão siga as mesmas regras.
+
+
+---
+
+transaction:
+Gerenciador de transação seguro. Cria um bloco protegido onde várias operações SQL são tratadas como uma unidade única. Se tudo ocorrer bem → commit. Se ocorrer erro → rollback. Garante consistência e evita estados parciais no banco. É o principal mecanismo de segurança contra corrupção lógica durante batch writes.
+
+---
+
+execute_many:
+Executa a mesma instrução SQL várias vezes com diferentes conjuntos de valores. É otimizada para inserções em lote. Não gerencia transação — apenas executa. Deve ser usada dentro de `transaction` quando for necessário garantir atomicidade.
+
+---
+
+execute_script:
+Executa múltiplas instruções SQL de uma vez (como criação de tabelas ou migrations). Ideal para DDL e scripts estruturais. Útil para inicializar ou reconstruir o banco de forma declarativa.
+
+
+---
+
+### Visão arquitetural geral
+
+Esse arquivo representa a **camada de infraestrutura do banco**.
+Ele separa claramente:
+
+* Configuração (DEFAULT_PRAGMAS)
+* Conexão (connect_sqlite)
+* Segurança de execução (apply_pragmas / _exec_pragma)
+* Consistência (transaction)
+* Execução utilitária (execute_many / execute_script)
+

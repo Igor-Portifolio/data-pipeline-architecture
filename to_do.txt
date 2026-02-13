@@ -6,5 +6,14 @@ terminar funções do pipeline de endereço, -> 4
 
 -------
 
-Estou no pipeline do bairro.
-Funcao de tokenizar bairros simplesmente nao faz sentido, deve-se rever isso.
+Tirar um tempo para compreender interações com SQL
+desenhar segundo pipeline de SQL para melhor compreensão.
+
+
+
+----------------------------------------
+
+Decisões qnt a engenharia de banco
+- Não é necessário wal uma vez que é um ETF simples e isolado
+- check_same_thread: bool = True -> nao sera necessário mais de uma | ETL Simples
+-

@@ -1,0 +1,48 @@
+Perfeito. Vou escrever no mesmo formato explicativo, direto e conceitual, função por função do **loader.py**.
+
+---
+
+SimpleLoadReport:
+Estrutura imutável que representa o resultado da operação de carga. Funciona como um “recibo” do processo, informando qual tabela foi carregada, quantas linhas foram inseridas, quais colunas foram usadas e qual foi o modo de execução (replace ou append). Serve para comunicação clara entre camadas, sem depender do banco para consultar o resultado depois.
+
+---
+
+df_to_sqlite:
+Função principal do módulo. Orquestra todo o pipeline de carga: valida parâmetros, sanitiza nomes, prepara o DataFrame, abre conexão, inicia transação, substitui ou mantém a tabela conforme o modo escolhido, cria a estrutura da tabela e realiza a inserção em lote. Centraliza a lógica de load e garante atomicidade da operação por meio da transação.
+
+---
+
+ensure_table_from_df:
+Responsável por criar a estrutura da tabela no SQLite com base nas colunas do DataFrame. Faz uma inferência simples de tipos e monta dinamicamente o comando CREATE TABLE. Garante que a estrutura exista antes da inserção de dados, atuando como etapa de definição de schema mínima para ambientes de staging.
+
+---
+
+insert_df:
+Executa a inserção efetiva dos dados no banco. Constrói dinamicamente o comando INSERT com placeholders seguros, divide o DataFrame em blocos (chunks) e utiliza execução em lote para maior eficiência e estabilidade. Não controla transação — assume que a atomicidade é responsabilidade da camada superior (df_to_sqlite).
+
+---
+
+_prepare_df:
+Prepara o DataFrame para compatibilidade com o SQLite. Converte valores nulos do pandas (NaN, NaT) para None, que é o formato correto para que o banco armazene como NULL. Evita inconsistências silenciosas durante a inserção.
+
+---
+
+_infer_sqlite_type:
+Realiza uma inferência simples do tipo de dados do pandas para os tipos suportados pelo SQLite. Converte inteiros para INTEGER, floats para REAL, booleanos para INTEGER e datas para TEXT. Atua como ponte entre o sistema de tipos do pandas e o modelo de tipos flexível do SQLite.
+
+---
+
+_safe_name:
+Sanitiza nomes de tabelas e colunas. Remove caracteres inválidos, evita nomes vazios e impede que o nome comece com número. Atua como camada de proteção estrutural contra SQL injection e problemas de sintaxe ao montar comandos SQL dinamicamente.
+
+---
+
+_chunk_to_rows:
+Converte um DataFrame (ou parte dele) em uma lista de tuplas prontas para inserção via executemany. É a etapa de adaptação estrutural entre o formato tabular do pandas e o formato esperado pelo driver SQLite.
+
+---
+
+Visão arquitetural do módulo:
+Este módulo representa a camada de carga (Load) do ETL. Ele não extrai dados nem executa transformações de negócio complexas — sua responsabilidade é adaptar um DataFrame ao formato do SQLite, garantir estrutura adequada e inserir dados de forma segura, transacional e escalável. A separação entre orquestração (df_to_sqlite), definição de estrutura (ensure_table_from_df) e inserção (insert_df) mantém o código organizado e com responsabilidades claras.
+
+---

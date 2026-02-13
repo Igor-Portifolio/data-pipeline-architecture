@@ -1,9 +1,6 @@
-import pandas as pd
 from src.domain.vocabulario.voc_geografia import *
 from src.domain.regras.endereco_regras import *
-from typing import Optional
-from src.infra.sql_writer import *
-from src.infra.readers import *
+from src.infra.io.readers import *
 from typing import List
 
 
