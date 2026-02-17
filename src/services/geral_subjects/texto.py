@@ -2,7 +2,8 @@ from typing import Optional, Union
 from unidecode import unidecode
 from pathlib import Path
 from src.domain.regras.lingua_regras import *
-
+from src.domain.vocabulario.voc_lingua import tel_len
+from typing import Iterable
 
 class Standard_text:
 
@@ -116,8 +117,8 @@ class Standard_text:
             flags=re.UNICODE
         )
 
-        # Remove qualquer coisa que não seja letra, número, espaço ou hífen
-        limpeza_final = re.compile(r'[^\w\s\-]')
+        # Permite letras, números, espaço, hífen e apóstrofo
+        limpeza_final = re.compile(r"[^A-Za-zÀ-ÿ\s\-']")
 
         for col in text_cols:
             if col not in df.columns:
@@ -127,13 +128,20 @@ class Standard_text:
 
             serie = serie.str.replace(emoji_pattern, '', regex=True)
             serie = serie.str.replace(limpeza_final, ' ', regex=True)
-            serie = serie.str.strip()
+
+            # Remove apóstrofo no início ou fim
+            serie = serie.str.replace(r"^'+|'+$", "", regex=True)
+
+            # Remove apóstrofo que não esteja entre letras
+            serie = serie.str.replace(r"(?<![A-Za-zÀ-ÿ])'|'(?![A-Za-zÀ-ÿ])", "", regex=True)
+
+            # Normaliza espaços
             serie = serie.str.replace(r'\s+', ' ', regex=True)
+            serie = serie.str.strip()
 
             serie = serie.replace(['', 'nan'], pd.NA)
 
             df[col] = serie
-
         self.df = df
         return df
 
@@ -246,5 +254,88 @@ class Standard_text:
 
         return self.df
 
+    def normalize_phone(
+            self,
+            nome_coluna: str,
+            *,
+            tel_len: Iterable[int] = tel_len
+
+    ) -> pd.DataFrame:
+        """
+        Normaliza telefones:
+          - converte para str
+          - mantém apenas dígitos
+          - valida tamanho (tel_len)
+          - se válido -> mantém dígitos
+          - se inválido -> NA
+        """
+        if nome_coluna not in self.df.columns:
+            raise KeyError(f"Coluna '{nome_coluna}' não existe no DataFrame.")
+
+        out = self.df.copy()
+
+        # str + strip -> retira os espaços
+        serie = out[nome_coluna].astype("string").str.strip()
+
+        # 2) somente números (vetorizado)
+        # equivalente a somente_numeros, mas em coluna inteira
+        digits = serie.str.replace(r"\D", "", regex=True)
+
+        # trata vazios
+        digits = digits.replace("", pd.NA)
+
+        # 3) valida pelo tamanho
+        valid_mask = digits.notna() & digits.str.len().isin(set(tel_len))
+
+        # 4) aplica regra final
+        cleaned = digits.where(valid_mask, pd.NA)
+
+        out[nome_coluna] = cleaned
+
+        self.df = out
+
+        return self.df
+
+    def normalize_cpf(
+            self,
+            nome_coluna: str,
+            *,
+            cpf_len: int = 11
+
+    ) -> pd.DataFrame:
+        """
+        Normaliza telefones:
+          - converte para str
+          - mantém apenas dígitos
+          - valida tamanho (tel_len)
+          - se válido -> mantém dígitos
+          - se inválido -> NA
+        """
+        if nome_coluna not in self.df.columns:
+            raise KeyError(f"Coluna '{nome_coluna}' não existe no DataFrame.")
+
+        out = self.df.copy()
+
+        # str + strip -> retira os espaços
+        serie = out[nome_coluna].astype("string").str.strip()
+
+        # 2) somente números (vetorizado)
+        # equivalente a somente_numeros, mas em coluna inteira
+        digits = serie.str.replace(r"\D", "", regex=True)
+
+        # trata vazios
+        digits = digits.replace("", pd.NA)
+
+        # 3) valida pelo tamanho
+        valid_mask = digits.notna() & (digits.str.len() == cpf_len)
+
+        # 4) aplica regra final
+        cleaned = digits.where(valid_mask, pd.NA)
+
+        out[nome_coluna] = cleaned
+
+        self.df = out
+
+        return self.df
 
 

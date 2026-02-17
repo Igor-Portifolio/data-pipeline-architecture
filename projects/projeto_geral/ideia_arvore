@@ -1,0 +1,11 @@
+projects/cliente_x/
+  run.py  --> Entry point que acita flags: Ex -> run --pipeline full | run --pipeline p1
+  config.py  --> Configurações e inputs do cliente
+  steps/  --> Como a maior parte do projeto esta em Python | Vou criar o pipeline 1 e 2
+    ingest.py  --> coleta mais padronização
+    quality_report.py  --> checagem de nulos, formatos e ranges | optional de criar metricas de checagem
+    transform.py --> Aplicação de regras de negocio
+    export.py --> entrega final para o cliente
+
+
+mas tenho uma questão. Eu preciso: rodar apenas pipeline 1 fazer chegagem em logs manual Rodar apenas o pipeline 2. Como um profissional lidaria com essa questão. Me de ideias.

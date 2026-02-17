@@ -105,3 +105,6 @@ DOMINIOS_EMAIL_COMUNS = {
     "zoho.com",
 }
 
+# Conjunto de possibilidades de um telefone válido
+tel_len = [8,9,10,11,13]
+

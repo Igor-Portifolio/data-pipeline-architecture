@@ -19,15 +19,17 @@ def classificar_string_simples(valor: str) -> List[str]:
 
     flags: list[str] = []
 
-    # ======================================================
-    # REGRA 1 — tamanho do nome
-    # ======================================================
-    if len(valor_normalizado) > 10:
+    # tokeniza por espaços (colapsa múltiplos espaços)
+    partes = [p for p in valor_normalizado.split() if p]
+
+    # REGRA 1 — "nome longo" por token (só se tiver 2+ palavras)
+    # ajuste o limiar conforme seu dado real
+    LIMIAR_TOKEN = 12
+
+    if any(len(p) >= LIMIAR_TOKEN for p in partes):
         flags.append("NOME_LONGO")
 
-    # ======================================================
     # REGRA 2 — domínio de e-mail
-    # ======================================================
     for dominio in DOMINIOS_EMAIL_COMUNS:
         if dominio in valor_normalizado:
             flags.append("DOMINIO_EMAIL")

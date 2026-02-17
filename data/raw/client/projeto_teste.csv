@@ -1,51 +1,51 @@
-"id,nome,email,cpf,telefone,data_nascimento,idade,salario,status"
-"1, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,1990-05-10,34,3500.50,Ativo"
-"2,@@Maria Souza,maria.souza@email,98765432100,11999998888,10/06/1985,trinta e oito,4.500,ativo"
-"3, JOAO  PEREIRA ,joao.pereira@email.com,111.222.333-44,11 97777-2222,1982/07/15,41,5200,INATIVO"
-"4,Ana Clara, ana.clara@email.com ,22233344455,21988887777,15-08-1995,28,2800.0,Ativo "
-"5,Carlos..Eduardo,carlos@email.com,333.444.555-66,21999996666,1993-12-01,30,3000,Ativo"
-"6, Fernanda Lima,fernanda.lima@email.com,44455566677,21988885555,01/01/1992,32,not_available,Ativo"
-"7,Pedro  Santos ,pedro.santos@email.com,555.666.777-88, 21 98888-4444 ,1991-03-20,33,4100.75,ATIVO"
-"8,Mariana  Costa,mariana.costa@email.com,66677788899,21999994444,1994-11-11,29,3900,Ativo"
-"9,Lucas  Almeida,lucas@email,777.888.999-00,21988883333,1988-02-02,36,6000,Inativo"
-"10,Paula  Teixeira,paula.teixeira@email.com,88899900011,(21)98888-2222,1987-09-09,37,5500.90,Ativo"
-"11,Renato  Dias,renato.dias@email.com,99900011122,21999992222,1996/10/10,27,3200,Ativo"
-"12,Bruna  Rocha,bruna.rocha@email.com,00011122233,21988881111,1998-04-04,26,3100.30,Ativo"
-"13,Thiago @@Melo,thiago.melo@email.com,12312312312,21977776666,2000-05-05,24,2700,Ativo"
-"14,Amanda  Silva,amanda.silva@email.com,32132132132,21966665555,1999-06-06,25,2900,Ativo"
-"15,Roberto  Lima,roberto.lima@email.com,45645645645,21955554444,1997-07-07,26,3300,Ativo"
-"16,Patricia  Gomes,patricia.gomes@email.com,78978978978,21944443333,1995-08-08,29,3600.00,Ativo"
-"17,Juliana  Alves,juliana.alves@email.com,15915915915,21933332222,1993-09-09,31,3800,Ativo"
-"18,Marcelo  Nunes,marcelo.nunes@email.com,75375375375,21922221111,1992-10-10,32,4000.10,Ativo"
-"19,Camila  Barros,camila.barros@email,95195195195,21911110000,1991-11-11,33,4200,Ativo"
-"20,Diego  Ribeiro,diego.ribeiro@email.com,85285285285,21900009999,1990-12-12,34,4500,Ativo"
-"21, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,1990-05-10,34,3500.50,Ativo"
-"22,Beatriz  Castro,beatriz.castro@email.com,74174174174,21988887776,1989-01-01,35,4700,Ativo"
-"23,Gabriel  Martins,gabriel.martins@email.com,96396396396,21999996665,1988-02-02,36,4900,Ativo"
-"24,Helena  Duarte,helena.duarte@email.com,14714714714,21988885554,1987-03-03,37,5100,Ativo"
-"25,Leonardo  Freitas,leonardo.freitas@email.com,25825825825,21977774443,1986-04-04,38,5300,Ativo"
-"26,Sofia  Ramos,sofia.ramos@email.com,36936936936,21966663332,1985-05-05,39,5500,Ativo"
-"27,Matheus  Cardoso,matheus.cardoso@email.com,15975315975,21955552221,1984-06-06,40,5700,Ativo"
-"28,Larissa  Mendes,larissa.mendes@email.com,75315975315,21944441110,1983-07-07,41,5900,Ativo"
-"29,Rafael  Pinto,rafael.pinto@email.com,45612378945,21933330009,1982-08-08,42,6100,Ativo"
-"30,Isabela  Moreira,isabela.moreira@email.com,78945612378,21922229998,1981-09-09,43,6300,Ativo"
-"31,Daniel  Carvalho,daniel.carvalho@email.com,95175385295,21911118887,1980-10-10,44,6500,Ativo"
-"32,Carolina  Araujo,carolina.araujo@email.com,85274196385,21900007776,1979-11-11,45,6700,Ativo"
-"33,Gustavo  Ferreira,gustavo.ferreira@email.com,14725836914,21899996665,1978-12-12,46,6900,Ativo"
-"34,Vanessa  Batista,vanessa.batista@email.com,36925814736,21888885554,1977-01-01,47,7100,Ativo"
-"35,Igor  Lima,igor.lima@email.com,12378945612,21877774443,1976-02-02,48,7300,Ativo"
-"36,Julia  Santos,julia.santos@email.com,45698712345,21866663332,1975-03-03,49,7500,Ativo"
-"37,Anderson  Souza,anderson.souza@email.com,78912345678,21855552221,1974-04-04,50,7700,Ativo"
-"38,Priscila  Rocha,priscila.rocha@email.com,15935725815,21844441110,1973-05-05,51,7900,Ativo"
-"39,Felipe  Dias,felipe.dias@email.com,75395145675,21833330009,1972-06-06,52,8100,Ativo"
-"40,Aline  Costa,aline.costa@email.com,95135785295,21822229998,1971-07-07,53,8300,Ativo"
-"41,Thiago  Gomes,thiago.gomes@email.com,85296374185,21811118887,1970-08-08,54,8500,Ativo"
-"42,Bianca  Alves,bianca.alves@email.com,74185296374,21800007776,1969-09-09,55,8700,Ativo"
-"43,Rodrigo  Martins,rodrigo.martins@email.com,36914725836,21799996665,1968-10-10,56,8900,Ativo"
-"44,Leticia  Barros,leticia.barros@email.com,25836914725,21788885554,1967-11-11,57,9100,Ativo"
-"45,Henrique  Nunes,henrique.nunes@email.com,14736925814,21777774443,1966-12-12,58,9300,Ativo"
-"46,Natalia  Ribeiro,natalia.ribeiro@email.com,36974125836,21766663332,1965-01-01,59,9500,Ativo"
-"47,Samuel  Freitas,samuel.freitas@email.com,25814736925,21755552221,1964-02-02,60,9700,Ativo"
-"48,Clara  Mendes,clara.mendes@email.com,14725896314,21744441110,1963-03-03,61,9900,Ativo"
-"49,Victor  Pinto,victor.pinto@email.com,36925874136,21733330009,1962-04-04,62,10100,Ativo"
-"50,Laura  Moreira,laura.moreira@email.com,25896314725,21722229998,1961-05-05,63,10300,Ativo"
+id,nome,email,cpf,telefone,data_nascimento,idade,salario,status
+1, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,10/05/1990,34,3500.5,Ativo
+2,@@Maria Souza,maria.souza@email,98765432100,11999998888,10/06/1985,38,4.5, ativo
+3, JOAO  PEREIRA ,,111.222.333-44,11 97777-2222,15/07/1982,41,5200,INATIVO
+4,    Ana Clara, ana.clara@email.com ,22233344455,21988887777,15/08/1995,28,2800,Ativo 
+5,       Carlos..Eduardo,carlos@email.com,333.444.555-66,21999996666,01/12/1993,30,3000,Ativo
+6,"Pedro D'Avila,'",fernanda.lima@email.com,44455566677,21988885555,01/01/1992,32,not_available,Ativo
+7,.Antônio Carlos Conrado,pedro.santos@email.com,555.666.777-88, 21 98888-4444 ,20/03/1991,33,4100.75,ATIVO
+8,(Cely Leal) GetulinaCéli Leal Silva,mariana.costa@email.com,66677788899,21999994444,11/11/1994,29,3900,Ativo
+9,Ângela de Carvalho Prado,lucas@email,777.888.999-00,21988883333,02/02/1988,,6000,Inativo
+10,Ângela Maria Andrade Pereira,paula.teixeira@email.com,88899900011,(21)98888-2222,09/09/1987,37,5500.9,Ativo
+11,A.J.Prazeres,renato.dias@email.com,99900011122,21999992222,10/10/1996,27,3200,Ativo
+12,",João Batista de Abreu",bruna.rocha@email.com,11122233,21988881111,04/04/1998,26,3100.3,Ativo
+13,(Cely Leal) GetulinaCéli Leal Silva,thiago.melo@email.com,12312312312,21977776666,05/05/2000,24,2700,Ativo
+14,Ângela de Carvalho Prado,amanda.silva@email.com,,21966665555,06/06/1999,25,2900,Ativo
+15,Ângela Maria Andrade Pereira,roberto.lima@email.com,45645645645,21955554444,07/07/1997,26,3300,Ativo
+16,A.J.Prazeres,patricia.gomes@email.com,78978978978,21944443333,08/08/1995,29,3600,Ativo
+17,",João Batista de Abreu",juliana.alves@email.com,15915915915,21933332222,09/09/1993,31,3800,Ativo
+18,Marcelo  Nunes,marcelo.nunes@email.com,75375375375,21922221111,10/10/1992,32,4000.1,Ativo
+19,Igor MichalawiskiMachado,camila.barros@email,95195195195,21911110000,,33,4200,Ativo
+20, Nomeerradomuitolongo,diego.ribeiro@email.com,85285285285,21900009999,12/12/1990,34,,Ativo
+21, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,10/05/1990,34,3500.5,Ativo
+22,Beatriz  Castro,beatriz.castro@email.com,74174174174,21988887776,01/01/1989,35,4700,Ativo
+23,Gabriel  Martins,gabriel.martins@email.com,96396396396,21999996665,02/02/1988,36,4900,Ativo
+24,Helena  Duarte,helena.duarte@email.com,14714714714,21988885554,03/03/1987,37,5100,Ativo
+25,Leonardo  Freitas,leonardo.freitas@email.com,25825825825,21977774443,04/04/1986,38,5300,Ativo
+26,Sofia  Ramos,sofia.ramos@email.com,36936936936,21966663332,05/05/1985,39,5500,Ativo
+27,Matheus  Cardoso,matheus.cardoso@email.com,15975315975,21955552221,06/06/1984,40,5700,Ativo
+28,Larissa  Mendes,larissa.mendes@email.com,75315975315,21944441110,07/07/1983,41,5900,Ativo
+29,Rafael  Pinto,rafael.pinto@email.com,45612378945,21933330009,08/08/1982,42,6100,Ativo
+30,Isabela  Moreira,isabela.moreira@email.com,78945612378,21922229998,09/09/1981,43,6300,Ativo
+31,Daniel  Carvalho,daniel.carvalho@email.com,95175385295,21911118887,10/10/1980,44,6500,Ativo
+32,,carolina.araujo@email.com,85274196385,21900007776,11/11/1979,45,6700,Ativo
+33,Gustavo  Ferreira,gustavo.ferreira@email.com,14725836914,21899996665,12/12/1978,46,6900,Ativo
+34,Vanessa  Batista,vanessa.batista@email.com,36925814736,21888885554,01/01/1977,47,7100,Ativo
+35,Igor  Lima,igor.lima@email.com,12378945612,21877774443,02/02/1976,48,7300,Ativo
+36,Julia  Santos,julia.santos@email.com,45698712345,21866663332,03/03/1975,49,7500,Ativo
+37,Anderson  Souza,anderson.souza@email.com,78912345678,21855552221,04/04/1974,50,7700,Ativo
+38,Priscila  Rocha,priscila.rocha@email.com,15935725815,21844441110,05/05/1973,51,7900,Ativo
+39,Felipe  Dias,felipe.dias@email.com,75395145675,21833330009,06/06/1972,52,8100,Ativo
+40,Aline  Costa,aline.costa@email.com,95135785295,21822229998,07/07/1971,53,8300,Ativo
+41,Thiago  Gomes,thiago.gomes@email.com,85296374185,21811118887,08/08/1970,54,8500,Ativo
+42,Bianca  Alves,bianca.alves@email.com,74185296374,21800007776,09/09/1969,55,8700,Ativo
+43,Rodrigo  Martins,rodrigo.martins@email.com,36914725836,21799996665,10/10/1968,56,8900,Ativo
+44,Leticia  Barros,leticia.barros@email.com,25836914725,21788885554,11/11/1967,57,9100,Ativo
+45,Henrique  Nunes,henrique.nunes@email.com,14736925814,21777774443,12/12/1966,58,9300,Ativo
+46,Natalia  Ribeiro,natalia.ribeiro@email.com,36974125836,21766663332,01/01/1965,59,9500,Ativo
+47,Samuel  Freitas,samuel.freitas@email.com,25814736925,21755552221,02/02/1964,60,9700,Ativo
+48,Clara  Mendes,clara.mendes@email.com,14725896314,21744441110,03/03/1963,61,9900,Ativo
+49,Victor  Pinto,victor.pinto@email.com,36925874136,21733330009,04/04/1962,62,10100,Ativo
+50,Laura  Moreira,laura.moreira@email.com,25896314725,21722229998,05/05/1961,63,10300,Ativo

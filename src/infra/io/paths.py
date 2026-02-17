@@ -9,6 +9,9 @@ from pathlib import Path
 
 project_root = Path(__file__).resolve().parents[3]
 data_path = project_root / "data" / "raw"
+staging_dir = project_root / "data" / "staging" / "clientes_limpos"
+curated_dir = project_root / "data" / "curated" / "cliente_final"
+logs_dir = project_root / "data" / "logs" / "nomes"
 
 
 def raw_data_file_path(filename: str) -> Path:
@@ -41,6 +44,58 @@ def raw_data_file_path(filename: str) -> Path:
     return path
 
 
-staging_dir = data_path / "staging" / "clientes_limpos"
-curated_dir = data_path / "curated" / "cliente_final"
-logs_dir = data_path / "logs" / "nomes"
+def stagging_data_file_path(filename: str) -> Path:
+    if not isinstance(filename, str) or not filename.strip():
+        raise ValueError("filename deve ser uma string não vazia.")
+
+    filename = filename.strip()
+
+    # Não permitir caminho junto
+    if Path(filename).name != filename:
+        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+
+    # Obrigatório ter extensão
+    if "." not in filename:
+        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+
+    path = staging_dir / filename
+
+    return path
+
+
+def curated_data_file_path(filename: str) -> Path:
+    if not isinstance(filename, str) or not filename.strip():
+        raise ValueError("filename deve ser uma string não vazia.")
+
+    filename = filename.strip()
+
+    # Não permitir caminho junto
+    if Path(filename).name != filename:
+        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+
+    # Obrigatório ter extensão
+    if "." not in filename:
+        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+
+    path = curated_dir / filename
+
+    return path
+
+
+def logs_data_file_path(filename: str) -> Path:
+    if not isinstance(filename, str) or not filename.strip():
+        raise ValueError("filename deve ser uma string não vazia.")
+
+    filename = filename.strip()
+
+    # Não permitir caminho junto
+    if Path(filename).name != filename:
+        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+
+    # Obrigatório ter extensão
+    if "." not in filename:
+        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+
+    path = logs_dir / filename
+
+    return path

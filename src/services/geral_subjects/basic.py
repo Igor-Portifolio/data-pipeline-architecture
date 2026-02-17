@@ -1,5 +1,4 @@
-from src.Support.basic_regras import *
-
+from src.support.basic_regras import *
 
 
 class Basic_clean:
@@ -25,7 +24,7 @@ class Basic_clean:
         def substituir(serie: pd.Series):
             if nulo is None:
                 # deixa em NaN
-                return serie.replace(["", " ", "nan", "None"], pd.NA)
+                return serie.replace(["", " ", "nan", "None", "not_available", "<NA>", "NAN", "Nan"], pd.NA)
             else:
                 # substitui nulos pela string
                 return serie.replace(["", " ", "nan", "None", pd.NA], nulo)
@@ -80,8 +79,8 @@ class Basic_clean:
         return self.df
 
     def normalizar_pontuacao(
-        self,
-        coluna: str | None = None
+            self,
+            coluna: str | None = None
     ) -> pd.DataFrame:
         """
         Aplica a normalização de pontuação em uma coluna específica
@@ -105,3 +104,27 @@ class Basic_clean:
 
         return self.df
 
+    def formatar_coluna_data_ddmmaaaa(self, coluna_data: str) -> pd.DataFrame:
+        """
+        Converte uma coluna de datas para o formato 'dd/mm/aaaa' (sem hora).
+
+        Responsabilidade:
+        - apenas transformação de formato
+        - não aplica regra de negócio
+        - altera somente a coluna especificada
+        """
+
+        if coluna_data not in self.df.columns:
+            raise KeyError(f"Coluna '{coluna_data}' não encontrada no DataFrame.")
+
+        try:
+            self.df[coluna_data] = (
+                pd.to_datetime(self.df[coluna_data], errors="raise")
+                .dt.strftime("%d/%m/%Y")
+            )
+        except Exception as e:
+            raise ValueError(
+                f"Erro ao converter coluna '{coluna_data}' para data: {e}"
+            )
+
+        return self.df

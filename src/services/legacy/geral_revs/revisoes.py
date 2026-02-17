@@ -82,14 +82,20 @@ def aplicar_revisao_nomes(
         idx = row["id_registro"]
         valor_revisado = row["valor_revisado"]
 
-        # 🚫 Não aplica se vazio / nulo
+        if idx not in df_final.index:
+            continue
+
+        # Se não for string ou for nulo → limpa a célula
         if not isinstance(valor_revisado, str):
+            df_final.at[idx, coluna_nome] = pd.NA
             continue
 
-        if valor_revisado.strip() == "":
-            continue
+        valor_limpo = valor_revisado.strip()
 
-        if idx in df_final.index:
-            df_final.at[idx, coluna_nome] = valor_revisado.strip()
+        # Se string vazia após strip → limpa
+        if valor_limpo == "":
+            df_final.at[idx, coluna_nome] = pd.NA
+        else:
+            df_final.at[idx, coluna_nome] = valor_limpo
 
     return df_final

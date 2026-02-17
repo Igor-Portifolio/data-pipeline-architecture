@@ -1,54 +1,72 @@
 from src.services.geral_subjects.texto import *
 from src.infra.io.writers import *
 from src.infra.io.paths import *
+from typing import Optional
+from src.services.legacy.geral_revs.revisoes import aplicar_revisao_nomes
 
 
-def text_basic_pipeline(df: pd.DataFrame) -> pd.DataFrame:
+def text_basic_pipeline(df: pd.DataFrame,
+                        columns_strings: str | list[str],
+                        column_email: str | list[str] | None = None,
+                        column_name: str | list[str] | None = None,
+                        column_cpf: str | None = None,
+                        column_tel: str | None = None) -> pd.DataFrame:
     if not isinstance(df, pd.DataFrame):
         raise TypeError("Entrada deve ser um pandas DataFrame")
 
     cleaner = Standard_text(df)
-
-    # 1️⃣ Remove emojis, pictogramas e símbolos
-    cleaner.remover_emojis_e_simbolos()
-
-    # 2️⃣ Normalização padrão do pipeline
     cleaner.normalize_text(
+        colunas=columns_strings,
         upper=True,
         remover_acentos=True
     )
+
+    if column_email is not None:
+        if not isinstance(column_email, str) and not isinstance(column_email, list):
+            raise ValueError("coluna_email deve ser uma string não vazia quando fornecida.")
+        cleaner.normalize_text(
+            colunas=column_email,
+            lower=True,
+        )
+
+    if column_name is not None:
+        if not isinstance(column_name, str) and not isinstance(column_name, list):
+            raise ValueError("coluna_nome deve ser uma string não vazia quando fornecida.")
+        cleaner.remover_emojis_e_simbolos(columns=column_name)
+
+    if column_cpf is not None:
+        if not isinstance(column_name, str) and not isinstance(column_name, list):
+            raise ValueError("coluna_cpf deve ser uma string não vazia quando fornecida.")
+        cleaner.normalize_cpf(nome_coluna=column_cpf)
+
+    if column_tel is not None:
+        if not isinstance(column_name, str) and not isinstance(column_name, list):
+            raise ValueError("column_tel deve ser uma string não vazia quando fornecida.")
+        cleaner.normalize_cpf(nome_coluna=column_tel)
 
     return cleaner.df
 
 
 def text_names_part_one_pipeline(
         df: pd.DataFrame,
-        coluna: str
+        coluna_nome: str
 ) -> pd.DataFrame:
-    """
-    Pipeline – Parte 1 de limpeza de nomes próprios:
-    1. Remove valores sem letras
-    2. Aplica limpeza semântica de nomes próprios
-    """
+
 
     if not isinstance(df, pd.DataFrame):
         raise TypeError("Entrada deve ser um pandas DataFrame")
 
     cleaner = Standard_text(df)
-
-    # 1️⃣ Remove valores que não contêm letras
-    cleaner.remover_valores_sem_letras(coluna)
-
-    # 2️⃣ Limpeza semântica de nomes próprios
-    cleaner.limpar_nomes_proprios(coluna)
+    cleaner.remover_valores_sem_letras(coluna_nome)
+    cleaner.limpar_nomes_proprios(coluna_nome)
 
     return cleaner.df
 
 
 def text_names_part_two_pipeline(
         df: pd.DataFrame,
-        coluna: str,
-        path_saida: str
+        coluna_nome: str,
+        logs_file_dir: str | Path,
 ) -> pd.DataFrame:
     """
     Pipeline – Parte 2 de nomes próprios:
@@ -64,19 +82,19 @@ def text_names_part_two_pipeline(
     # 1️⃣ Coleta casos suspeitos (sem mutar o DF principal)
     df_revisao = cleaner.coletar_casos_suspeitos(
         df=df,
-        coluna_nome=coluna
+        coluna_nome=coluna_nome
     )
 
     # 2️⃣ Exporta fila de revisão
-    salvar_df_para_csv(df, logs_dir)
+    salvar_df_para_csv(df_revisao, logs_file_dir)
 
     return df
 
 
 def text_names_part_tree_pipeline(
         df: pd.DataFrame,
-        coluna: str,
-        path_saida: str
+        coluna_nome: str,
+        path_logs: str | Path
 ) -> pd.DataFrame:
     """
     Pipeline – Parte 3 de nomes próprios:
@@ -88,7 +106,7 @@ def text_names_part_tree_pipeline(
         raise TypeError("Entrada deve ser um pandas DataFrame")
 
     # Se o arquivo de revisão não existir, não faz nada
-    path = Path(path_saida)
+    path = Path(path_logs)
     if not path.exists():
         return df
 
@@ -100,10 +118,10 @@ def text_names_part_tree_pipeline(
         return df
 
     # Aplica revisões
-    df_final = aplicar_revisao_manual(
+    df_final = aplicar_revisao_nomes(
         df_original=df,
-        df_revisao=df_logs,
-        nome_coluna_df=coluna
+        df_logs=df_logs,
+        coluna_nome=coluna_nome
     )
 
     return df_final

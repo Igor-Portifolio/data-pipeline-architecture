@@ -5,7 +5,6 @@ Responsabilidade: escrever/exportar resultados.
 from pathlib import Path
 import pandas as pd
 
-
 def salvar_df_para_csv(
     df: pd.DataFrame,
     path_csv: str | Path,
@@ -20,7 +19,8 @@ def salvar_df_para_csv(
     - apenas escrita
     - nenhuma validação semântica
     - nenhuma transformação
-    - cria diretório se necessário
+    - NÃO cria diretórios
+    - falha se diretório não existir
     """
 
     if not isinstance(df, pd.DataFrame):
@@ -31,8 +31,10 @@ def salvar_df_para_csv(
     if path.suffix.lower() != ".csv":
         raise ValueError("O arquivo deve ter extensão .csv.")
 
-    # garante que o diretório existe
-    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.parent.exists():
+        raise FileNotFoundError(
+            f"O diretório '{path.parent}' não existe."
+        )
 
     try:
         df.to_csv(
@@ -45,4 +47,5 @@ def salvar_df_para_csv(
         raise IOError(f"Erro ao salvar CSV: {e}")
 
     return path
+
 
