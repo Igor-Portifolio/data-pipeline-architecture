@@ -9,3 +9,16 @@ projects/cliente_x/
 
 
 mas tenho uma questão. Eu preciso: rodar apenas pipeline 1 fazer chegagem em logs manual Rodar apenas o pipeline 2. Como um profissional lidaria com essa questão. Me de ideias.
+
+
+projects/cliente_x/
+  run.py
+  config.py
+  paths.py
+  context.
+  steps/
+    __init__.py
+    ingest.py
+    transform.py
+    quality_report.py
+    export.py
