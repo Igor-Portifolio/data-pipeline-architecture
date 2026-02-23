@@ -1,4 +1,4 @@
-from src.domain.regras.idade_dadas_regras import *
+from src.domain.rules.temporal import *
 
 
 class AgeClassifier:

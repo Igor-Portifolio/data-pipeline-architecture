@@ -1,5 +1,5 @@
-from src.domain.vocabulario.voc_geografia import *
-from src.domain.regras.endereco_regras import *
+from src.domain.vocabulary.voc_geografia import *
+from src.domain.rules.address import *
 from src.infra.io.readers import *
 from typing import List
 

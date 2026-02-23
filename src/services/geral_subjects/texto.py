@@ -1,8 +1,8 @@
 from typing import Optional, Union
 from unidecode import unidecode
 from pathlib import Path
-from src.domain.regras.lingua_regras import *
-from src.domain.vocabulario.voc_lingua import tel_len
+from src.domain.rules.name_normalization import *
+from src.domain.vocabulary.voc_lingua import tel_len
 from typing import Iterable
 
 class Standard_text:

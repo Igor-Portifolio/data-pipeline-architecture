@@ -1,5 +1,5 @@
 import pandas as pd
-from src.domain.regras.geogra_regras import *
+from src.domain.rules.geography import *
 
 class ClassificadorRegiao:
 

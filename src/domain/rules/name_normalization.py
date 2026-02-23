@@ -1,11 +1,11 @@
-from src.domain.vocabulario.voc_lingua import *
+from src.domain.vocabulary.voc_lingua import *
 import re
 from typing import List
 import pandas as pd
 
 def classificar_string_simples(valor: str) -> List[str]:
     """
-    Classifica uma string simples com base em regras heurísticas.
+    Classifica uma string simples com base em rules heurísticas.
 
     Regras:
     - Se tiver mais de 9 caracteres -> NOME_LONGO

@@ -1,19 +1,39 @@
-# Notas gerais
+# General Notes
 
-## raw - Espelho da Realidade 
+## Raw – Mirror of Reality
 
-Guarda os dados da maneira que eles chegaram. Back-up confiavel. 
+Stores the data exactly as it was received.
+This layer acts as a reliable backup and a faithful snapshot of the original source.
 
-## staging - Organização Técnica
+No transformations, corrections, or structural changes should occur here.
+The purpose of this layer is traceability and reproducibility.
 
-Transforma dados crus em estruturalmente consistentes. 
+---
 
-- Nomes de colunas inconsistentes
-- tipos errados
-- duplicidade
-- normalização básica
+## Staging – Technical Organization
 
+Transforms raw data into a structurally consistent format.
 
-## Curated 
+This layer handles technical normalization and structural corrections, including:
 
-Aplica regras de negócio. 
+* Inconsistent column names
+* Incorrect data types
+* Duplicate records
+* Basic normalization and standardization
+
+Staging ensures that data is technically coherent and ready for business-level processing.
+
+---
+
+## Curated – Business Logic Layer
+
+Applies domain-specific business rules to structurally consistent data.
+
+This layer is responsible for:
+
+* Business validations
+* Rule enforcement
+* Domain-specific transformations
+* Canonical formatting according to company standards
+
+Curated data represents trusted, business-ready information.

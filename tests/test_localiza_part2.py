@@ -1,6 +1,6 @@
 import pytest
 from typing import List
-from src.domain.regras.endereco_regras import *
+from src.domain.rules.address import *
 
 #
 # def test_tem_mesmo_prefixo_prefixos_iguais_retorna_true():
@@ -85,11 +85,11 @@ def test_lista_com_apenas_espacos_retorna_vazio():
 
 def test_sem_similaridade_gera_grupos_unitarios(monkeypatch):
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.tem_mesmo_prefixo",
+        "src.domain.rules.endereco_regras.tem_mesmo_prefixo",
         always_false
     )
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.eh_similar_jaro_winkler",
+        "src.domain.rules.endereco_regras.eh_similar_jaro_winkler",
         always_false
     )
 
@@ -101,11 +101,11 @@ def test_sem_similaridade_gera_grupos_unitarios(monkeypatch):
 
 def test_similaridade_por_prefixo(monkeypatch):
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.tem_mesmo_prefixo",
+        "src.domain.rules.endereco_regras.tem_mesmo_prefixo",
         prefix_only
     )
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.eh_similar_jaro_winkler",
+        "src.domain.rules.endereco_regras.eh_similar_jaro_winkler",
         always_false
     )
 
@@ -117,11 +117,11 @@ def test_similaridade_por_prefixo(monkeypatch):
 
 def test_similaridade_por_jaro(monkeypatch):
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.tem_mesmo_prefixo",
+        "src.domain.rules.endereco_regras.tem_mesmo_prefixo",
         always_false
     )
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.eh_similar_jaro_winkler",
+        "src.domain.rules.endereco_regras.eh_similar_jaro_winkler",
         always_true
     )
 
@@ -139,11 +139,11 @@ def test_quebra_de_grupo_funciona(monkeypatch):
         return a.startswith("Vila") and b.startswith("Vila")
 
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.tem_mesmo_prefixo",
+        "src.domain.rules.endereco_regras.tem_mesmo_prefixo",
         always_false
     )
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.eh_similar_jaro_winkler",
+        "src.domain.rules.endereco_regras.eh_similar_jaro_winkler",
         fake_jaro
     )
 
@@ -156,11 +156,11 @@ def test_quebra_de_grupo_funciona(monkeypatch):
 
 def test_ordem_e_preservada(monkeypatch):
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.tem_mesmo_prefixo",
+        "src.domain.rules.endereco_regras.tem_mesmo_prefixo",
         always_true
     )
     monkeypatch.setattr(
-        "src.domain.regras.endereco_regras.eh_similar_jaro_winkler",
+        "src.domain.rules.endereco_regras.eh_similar_jaro_winkler",
         always_false
     )
 

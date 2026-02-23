@@ -1,19 +1,5 @@
 
-testar funções -> 1
-montar pipeline basico cleaning -> 2
-montar pipeline nomes -> 3
-terminar funções do pipeline de endereço, -> 4
+2) Definir convenções oficiais (1 arquivo)
 
--------
-
-Tirar um tempo para compreender interações com SQL
-desenhar segundo pipeline de SQL para melhor compreensão.
-
-
-
-----------------------------------------
-
-Decisões qnt a engenharia de banco
-- Não é necessário wal uma vez que é um ETF simples e isolado
-- check_same_thread: bool = True -> nao sera necessário mais de uma | ETL Simples
--
+Limpar namings e docstrings
+3) Limpar o “lixo sem nome”

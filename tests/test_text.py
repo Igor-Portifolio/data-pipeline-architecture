@@ -1,4 +1,4 @@
-# from src.domain.regras.lingua_regras import *
+# from src.domain.rules.lingua_regras import *
 # from src.pipelines.auto.text_pipeline import *
 #
 # def test_classificar_string_simples_non_string():

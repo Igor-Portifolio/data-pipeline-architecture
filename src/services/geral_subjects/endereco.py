@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas.core.interchange.dataframe_protocol import DataFrame
 
-from src.domain.regras.endereco_regras import *
+from src.domain.rules.address import *
 
 
 class NormalizadorEndereco:

@@ -1,5 +1,5 @@
 import pandas as pd
-from src.domain.vocabulario.voc_temporal import *
+from src.domain.vocabulary.voc_temporal import *
 from typing import Optional
 from datetime import date, datetime
 

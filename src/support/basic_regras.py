@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from typing import Optional
 from typing import List
-from src.domain.vocabulario.voc_outros import SUPERSCRIPT_MAP
+from src.domain.vocabulary.voc_outros import SUPERSCRIPT_MAP
 
 def coerce_value(valor: Any):
     """

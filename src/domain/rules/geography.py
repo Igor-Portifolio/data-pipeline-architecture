@@ -1,4 +1,4 @@
-from src.domain.vocabulario.voc_geografia import *
+from src.domain.vocabulary.voc_geografia import *
 from typing import Optional
 
 
