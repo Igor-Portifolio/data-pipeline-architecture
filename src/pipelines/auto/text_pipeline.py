@@ -40,7 +40,7 @@ def text_basic_pipeline(df: pd.DataFrame,
         cleaner.normalize_cpf(nome_coluna=column_cpf)
 
     if column_tel is not None:
-        if not isinstance(column_name, str) and not isinstance(column_name, list):
+        if not isinstance(column_tel, str) and not isinstance(column_tel, list):
             raise ValueError("column_tel deve ser uma string não vazia quando fornecida.")
         cleaner.normalize_cpf(nome_coluna=column_tel)
 
@@ -51,12 +51,11 @@ def text_names_part_one_pipeline(
         df: pd.DataFrame,
         coluna_nome: str
 ) -> pd.DataFrame:
-
-
     if not isinstance(df, pd.DataFrame):
         raise TypeError("Entrada deve ser um pandas DataFrame")
 
     cleaner = Standard_text(df)
+
     cleaner.remover_valores_sem_letras(coluna_nome)
     cleaner.limpar_nomes_proprios(coluna_nome)
 

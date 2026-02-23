@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from typing import Optional
 from typing import List
-
+from src.domain.vocabulario.voc_outros import SUPERSCRIPT_MAP
 
 def coerce_value(valor: Any):
     """
@@ -44,6 +44,9 @@ def coerce_value(valor: Any):
 
     # remove símbolo de moeda
     texto_num = re.sub(r"[R$\s]", "", texto)
+
+    # 🔹 NOVO: normaliza dígitos sobrescritos
+    texto_num = texto_num.translate(SUPERSCRIPT_MAP)
 
     # padrão brasileiro: 1.234,56
     if re.fullmatch(r"\d{1,3}(\.\d{3})*,\d+", texto_num):

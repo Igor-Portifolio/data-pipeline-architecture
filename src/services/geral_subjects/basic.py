@@ -24,7 +24,7 @@ class Basic_clean:
         def substituir(serie: pd.Series):
             if nulo is None:
                 # deixa em NaN
-                return serie.replace(["", " ", "nan", "None", "not_available", "<NA>", "NAN", "Nan"], pd.NA)
+                return serie.replace(["", " ", "nan", "None", "not_available", "<NA>", "NAN", "Nan", "<na>"], pd.NA)
             else:
                 # substitui nulos pela string
                 return serie.replace(["", " ", "nan", "None", pd.NA], nulo)

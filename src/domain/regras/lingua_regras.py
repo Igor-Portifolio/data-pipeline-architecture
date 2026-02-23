@@ -37,12 +37,26 @@ def classificar_string_simples(valor: str) -> List[str]:
 
     return flags
 
-def remover_titulos_e_profissoes(texto: str) -> str:
+def remover_termos_invalidos(texto: str) -> str:
     if not isinstance(texto, str):
         return ""
 
-    padrao = r"\b(" + "|".join(titulos_profissoes) + r")\.?\b"
-    return re.sub(padrao, "", texto, flags=re.IGNORECASE).strip()
+    termos_invalidos = (
+        set(titulos_profissoes)
+        | set(partidos_politicos)
+        | set(universidades_federais)
+        | set(ufs_brasil)
+    )
+
+    if not termos_invalidos:
+        return texto.strip()
+
+    padrao = r"\b(" + "|".join(re.escape(t) for t in termos_invalidos) + r")\.?\b"
+
+    texto_limpo = re.sub(padrao, "", texto, flags=re.IGNORECASE)
+    texto_limpo = re.sub(r"\s{2,}", " ", texto_limpo).strip()
+
+    return texto_limpo
 
 def normalizar_caracteres_nome(texto: str) -> str:
     if not isinstance(texto, str):
@@ -88,7 +102,7 @@ def pipeline_limpar_nome_domain(texto: str):
 
     texto = texto.strip()
 
-    texto = remover_titulos_e_profissoes(texto)
+    texto = remover_termos_invalidos(texto)
     texto = normalizar_caracteres_nome(texto)
 
     if eh_nome_linguisticamente_invalido(texto):

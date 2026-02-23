@@ -91,3 +91,37 @@ def ler_csv_clinte_para_df(
 
     return df
 
+def ler_xlsx_clinte_para_df(
+    path_xlsx: str | Path,
+    sheet_name: str | int = 0
+) -> pd.DataFrame:
+    """
+    Lê um arquivo XLSX e retorna um DataFrame.
+
+    Responsabilidade:
+    - apenas leitura
+    - nenhuma validação semântica
+    - nenhuma transformação
+    """
+
+    path = Path(path_xlsx)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+
+    try:
+        df = pd.read_excel(
+            path,
+            sheet_name=sheet_name,
+            engine="openpyxl"
+        )
+    except ValueError as e:
+        raise ValueError(f"Erro ao ler o XLSX: {e}")
+    except ImportError:
+        raise ImportError(
+            "openpyxl não está instalado. Instale com: pip install openpyxl"
+        )
+
+    return df
+
+
