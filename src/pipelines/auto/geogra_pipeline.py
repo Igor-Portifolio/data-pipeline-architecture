@@ -1,4 +1,4 @@
-from src.services.geral_subjects.geografia import *
+from src.services.geography_service import *
 
 def geogra_pipeline(
     df: pd.DataFrame,

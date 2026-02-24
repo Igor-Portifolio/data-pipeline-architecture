@@ -1,8 +1,7 @@
-from src.services.geral_subjects.endereco import *
+from src.services.address_service import *
 from src.infra.db.loader import *
-from src.infra.db.connection import *
 from src.infra.db.executor import *
-from src.services.geral_subjects.ibge_service import *
+from src.services.ibge_service import *
 
 # Diretorio da db
 dir = Path(__file__).parent.parent.parent

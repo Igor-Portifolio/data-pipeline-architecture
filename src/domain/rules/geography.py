@@ -1,30 +1,29 @@
-from src.domain.vocabulary.voc_geografia import *
+from src.domain.vocabulary.voc_geografia import regiao_por_uf, nome_para_uf
 from typing import Optional
 
 
-def classificar_regiao_estado(valor: str) -> Optional[str]:
+def classify_state_region(value: str) -> Optional[str]:
     """
-    Recebe nome ou sigla de um estado brasileiro e retorna a região correspondente.
-    """
+    Return the Brazilian region corresponding to a given state name
+    or state code (UF).
 
-    if not isinstance(valor, str):
+    Args:
+        value: State name or two-letter state code.
+
+    Returns:
+        The corresponding region if found, otherwise None.
+    """
+    if not isinstance(value, str):
         return None
 
-    valor = valor.strip().upper()
-
-    if not valor:
+    value = value.strip().upper()
+    if not value:
         return None
 
-    # ======================================================
-    # Caso 1 — sigla (UF)
-    # ======================================================
-    if valor in regiao_por_uf:
-        return regiao_por_uf[valor]
+    if value in regiao_por_uf:
+        return regiao_por_uf[value]
 
-    # ======================================================
-    # Caso 2 — nome completo do estado
-    # ======================================================
-    uf = nome_para_uf.get(valor)
+    uf = nome_para_uf.get(value)
     if uf:
         return regiao_por_uf.get(uf)
 

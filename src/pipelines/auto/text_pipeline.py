@@ -1,7 +1,6 @@
-from src.services.geral_subjects.texto import *
+from src.services.text_normalization_service import *
 from src.infra.io.writers import *
 from src.infra.io.paths import *
-from typing import Optional
 from src.services.legacy.geral_revs.revisoes import aplicar_revisao_nomes
 
 

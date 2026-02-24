@@ -1,4 +1,4 @@
-from src.services.geral_subjects.basic import *
+from src.services.dataframe_cleaning_service import *
 
 
 def basic_pipeline_1st(df: pd.DataFrame, coluna_data: str | None = None) -> pd.DataFrame:

@@ -1,116 +1,258 @@
 from src.domain.vocabulary.voc_lingua import *
 import re
-from typing import List
-import pandas as pd
+from typing import List, Optional
+from src.domain.primitives.tokenization import tokenize_words
+from src.domain.primitives.text_normalization import normalize_person_name_characters
 
-def classificar_string_simples(valor: str) -> List[str]:
+
+def flag_long_name(text: str, *, min_length: int = 12) -> str | None:
     """
-    Classifica uma string simples com base em rules heurísticas.
+    Flag text if any token exceeds a given length threshold.
 
-    Regras:
-    - Se tiver mais de 9 caracteres -> NOME_LONGO
-    - Se contiver domínio de e-mail conhecido -> DOMINIO_EMAIL
+    Args:
+        text: Input string to evaluate.
+        min_length: Minimum token length required to trigger the flag.
+
+    Returns:
+        "((LONG_NAME))" if any token length is greater than or equal
+        to the threshold, otherwise None.
     """
+    tokens = tokenize_words(text)
 
-    if not isinstance(valor, str):
+    if any(len(token) >= min_length for token in tokens):
+        return "LONG_NAME"
+
+    return None
+
+
+def flag_email(text: str) -> str | None:
+    """
+    Flag text if it contains a known email domain pattern,
+    even if the domain appears without punctuation or with spaces.
+
+    Examples detected:
+        - user@gmail.com
+        - user gmail com
+        - user gmailcom
+        - user gmail com br
+
+    Args:
+        text: Input string to evaluate.
+
+    Returns:
+        "((EMAIL))" if a known domain pattern is detected,
+        otherwise None.
+    """
+    if not isinstance(text, str):
+        return None
+
+    text = text.strip().lower()
+    if not text:
+        return None
+
+    # Remove everything except letters and numbers
+    compact_text = re.sub(r"[^a-z0-9]", "", text)
+
+    for domain in DOMINIOS_EMAIL_COMUNS:
+        normalized_domain = re.sub(r"[^a-z0-9]", "", domain.lower())
+
+        if normalized_domain in compact_text:
+            return "EMAIL"
+
+    return None
+
+
+def flag_too_many_names(text: str, *, max_tokens: int = 6) -> str | None:
+    """
+    Flag text if it contains more tokens than the allowed threshold.
+
+    Tokenization is performed using the primitive tokenizer,
+    which normalizes whitespace and converts text to lowercase.
+
+    Args:
+        text: Input string to evaluate.
+        max_tokens: Maximum allowed number of tokens before triggering the flag.
+
+    Returns:
+        "TOO_MANY_NAMES" if the number of tokens exceeds the threshold,
+        otherwise None.
+    """
+    tokens = tokenize_words(text)
+
+    if len(tokens) > max_tokens:
+        return "TOO_MANY_NAMES"
+
+    return None
+
+
+def evaluate_name_flags(
+        text: Optional[str],
+        *,
+        min_length: int = 12,
+        max_tokens: int = 6,
+) -> List[str]:
+    """
+    Evaluate multiple name-related validation rules and return all triggered flags.
+
+    This function composes independent domain rules:
+        - flag_long_name
+        - flag_email
+        - flag_too_many_names
+
+    The function is deterministic and side effect free.
+
+    Args:
+        text: Input string to evaluate.
+        min_length: Minimum token length for LONG_NAME flag.
+        max_tokens: Maximum allowed tokens before TOO_MANY_NAMES flag.
+
+    Returns:
+        A list of triggered flag identifiers.
+        Returns an empty list if no rules are triggered.
+
+    Notes:
+        - Order of evaluation is fixed and deterministic.
+        - No rule overrides another.
+    """
+    if not isinstance(text, str):
         return []
 
-    valor_normalizado = valor.strip().lower()
+    text = text.strip()
+    if not text:
+        return []
 
-    flags: list[str] = []
+    flags: List[str] = []
 
-    # tokeniza por espaços (colapsa múltiplos espaços)
-    partes = [p for p in valor_normalizado.split() if p]
+    long_name_flag = flag_long_name(text, min_length=min_length)
+    if long_name_flag:
+        flags.append(long_name_flag)
 
-    # REGRA 1 — "nome longo" por token (só se tiver 2+ palavras)
-    # ajuste o limiar conforme seu dado real
-    LIMIAR_TOKEN = 12
+    email_flag = flag_email(text)
+    if email_flag:
+        flags.append(email_flag)
 
-    if any(len(p) >= LIMIAR_TOKEN for p in partes):
-        flags.append("NOME_LONGO")
-
-    # REGRA 2 — domínio de e-mail
-    for dominio in DOMINIOS_EMAIL_COMUNS:
-        if dominio in valor_normalizado:
-            flags.append("DOMINIO_EMAIL")
-            break
+    too_many_flag = flag_too_many_names(text, max_tokens=max_tokens)
+    if too_many_flag:
+        flags.append(too_many_flag)
 
     return flags
 
-def remover_termos_invalidos(texto: str) -> str:
-    if not isinstance(texto, str):
+
+def remove_invalid_terms(text: str) -> str:
+    """
+    Remove predefined invalid terms from text.
+
+    The function performs a case-insensitive match against a predefined
+    collection of invalid terms and removes full-word occurrences,
+    optionally followed by a period.
+
+    Args:
+        text: Input string to sanitize.
+
+    Returns:
+        Cleaned string with invalid terms removed.
+        Returns an empty string if input is not a string.
+    """
+    if not isinstance(text, str):
         return ""
 
-    termos_invalidos = (
-        set(titulos_profissoes)
-        | set(partidos_politicos)
-        | set(universidades_federais)
-        | set(ufs_brasil)
+    invalid_terms = (
+            set(titulos_profissoes)
+            | set(partidos_politicos)
+            | set(universidades_federais)
+            | set(ufs_brasil)
     )
 
-    if not termos_invalidos:
-        return texto.strip()
+    if not invalid_terms:
+        return text.strip()
 
-    padrao = r"\b(" + "|".join(re.escape(t) for t in termos_invalidos) + r")\.?\b"
+    pattern = r"\b(" + "|".join(re.escape(term) for term in invalid_terms) + r")\.?\b"
 
-    texto_limpo = re.sub(padrao, "", texto, flags=re.IGNORECASE)
-    texto_limpo = re.sub(r"\s{2,}", " ", texto_limpo).strip()
+    cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
 
-    return texto_limpo
+    return cleaned_text
 
-def normalizar_caracteres_nome(texto: str) -> str:
-    if not isinstance(texto, str):
-        return ""
 
-    texto = re.sub(r"[^A-Za-zÀ-ÿ\s']", "", texto)
-    texto = re.sub(r"^'+", "", texto)
-    texto = re.sub(r"'+$", "", texto)
-    texto = re.sub(r"\s+'\s+", " ", texto)
-    texto = re.sub(r"\s+", " ", texto)
+def is_linguistically_invalid_name(text: str) -> bool:
+    """
+    Check whether a name-like text is linguistically invalid based on forbidden terms.
 
-    return texto.strip()
+    The check is case-insensitive and matches whole terms using word boundaries.
 
-def eh_nome_linguisticamente_invalido(texto: str) -> bool:
-    if not isinstance(texto, str):
+    Args:
+        text: Input string to evaluate.
+
+    Returns:
+        True if the input is not a string or if any invalid term is found; otherwise False.
+    """
+    if not isinstance(text, str):
         return True
 
-    termos_invalidos = (
-        RELACOES_FAMILIARES
-        | ENTIDADES_RELIGIOSAS
-        | FRASES_RELIGIOSAS
-        | RESPOSTAS_INVALIDAS
-        | TOKENS_INVALIDOS_SOLOS
+    invalid_terms = (
+            RELACOES_FAMILIARES
+            | ENTIDADES_RELIGIOSAS
+            | FRASES_RELIGIOSAS
+            | RESPOSTAS_INVALIDAS
+            | TOKENS_INVALIDOS_SOLOS
     )
 
-    padrao = r"\b(" + "|".join(re.escape(t) for t in termos_invalidos) + r")\b"
-
-    return bool(re.search(padrao, texto, flags=re.IGNORECASE))
-
-def texto_tem_letras(texto: str) -> bool:
-    if not isinstance(texto, str):
+    if not invalid_terms:
         return False
 
-    return bool(re.search(r"[A-Za-zÀ-ÿ]", texto))
+    pattern = r"\b(" + "|".join(re.escape(term) for term in invalid_terms) + r")\b"
 
-def pipeline_limpar_nome_domain(texto: str):
+    return bool(re.search(pattern, text, flags=re.IGNORECASE))
+
+
+def text_contains_letters(text: str) -> bool:
     """
-    Dado um texto cru, retorna nome limpo ou pd.NA.
+    Check whether the text contains at least one Latin letter
+    (including accented characters).
+
+    Args:
+        text: Input string to evaluate.
+
+    Returns:
+        True if at least one letter is found; False otherwise.
+        Returns False if input is not a string.
     """
+    if not isinstance(text, str):
+        return False
 
-    if not isinstance(texto, str):
-        return pd.NA
-
-    texto = texto.strip()
-
-    texto = remover_termos_invalidos(texto)
-    texto = normalizar_caracteres_nome(texto)
-
-    if eh_nome_linguisticamente_invalido(texto):
-        return pd.NA
-
-    if not texto_tem_letras(texto):
-        return pd.NA
-
-    return texto
+    return bool(re.search(r"[A-Za-zÀ-ÿ]", text))
 
 
+def clean_name_domain_pipeline(text: str, *, keep_numbers: bool = False) -> str | None:
+    """
+    Clean a raw text into a name-like string or return None if invalid.
+
+    This function is domain-level: it composes existing rules and primitives,
+    remains deterministic, and avoids side effects.
+
+    Args:
+        text: Raw input string.
+        keep_numbers: If True, skips character normalization that would remove digits.
+
+    Returns:
+        A cleaned name-like string if valid; otherwise None.
+    """
+    if not isinstance(text, str):
+        return None
+
+    text = text.strip()
+    if not text:
+        return None
+
+    text = remove_invalid_terms(text)
+
+    if not keep_numbers:
+        text = normalize_person_name_characters(text)
+
+    if is_linguistically_invalid_name(text):
+        return None
+
+    if not text_contains_letters(text):
+        return None
+
+    return text
