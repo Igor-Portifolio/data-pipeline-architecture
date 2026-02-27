@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Union
 import pandas as pd
 from src.infra.db.connection import connect_sqlite, transaction
 
@@ -148,7 +148,7 @@ def materialize_view(
     Materialize a VIEW from a SELECT query.
 
     Notes:
-      - SQLite doesn't support parameters in CREATE VIEW the way you expect.
+      - SQLite doesn't future parameters in CREATE VIEW the way you expect.
         Pass a fully rendered select_sql (no params).
     """
     name = _safe_identifier(name)

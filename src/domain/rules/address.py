@@ -1,4 +1,4 @@
-from src.domain.vocabulary.voc_endereco import *
+from src.domain.vocabulary.address import *
 import re
 from typing import Any
 from typing import Mapping

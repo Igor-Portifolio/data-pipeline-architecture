@@ -1,8 +1,8 @@
 id,nome,email,cpf,telefone,data_nascimento,idade,salario,status
-1, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,10/05/1990,34,3500.5,Ativo
+1, ..Igor  Silva  ??,qualquer coisa,123.456.789-00,(11)98888-1111,10/05/1990,34,3500.5,Ativo
 2,@@Maria Souza,maria.souza@email,98765432100,11999998888,10/06/1985,38,4.5, ativo
 3, JOAO  PEREIRA ,,111.222.333-44,11 97777-2222,15/07/1982,41,5200,INATIVO
-4,    Ana Clara, ana.clara@email.com ,22233344455,21988887777,15/08/1995,28,2800,Ativo 
+4, ana.clara@email.com ,,22233344455,21988887777,15/08/1995,28,2800,Ativo 
 5,       Carlos..Eduardo,carlos@email.com,333.444.555-66,21999996666,01/12/1993,30,3000,Ativo
 6,"Pedro D'Avila,'",fernanda.lima@email.com,44455566677,21988885555,01/01/1992,32,not_available,Ativo
 7,.Antônio Carlos Conrado,pedro.santos@email.com,555.666.777-88, 21 98888-4444 ,20/03/1991,33,4100.75,ATIVO
@@ -18,7 +18,7 @@ id,nome,email,cpf,telefone,data_nascimento,idade,salario,status
 17,",João Batista de Abreu",juliana.alves@email.com,15915915915,21933332222,09/09/1993,31,3800,Ativo
 18,Marcelo  Nunes,marcelo.nunes@email.com,75375375375,21922221111,10/10/1992,32,4000.1,Ativo
 19,Igor MichalawiskiMachado,camila.barros@email,95195195195,21911110000,,33,4200,Ativo
-20, Nomeerradomuitolongo,diego.ribeiro@email.com,85285285285,21900009999,12/12/1990,34,,Ativo
+20,diego.ribeiro@email.com,diego.ribeiro@email.com,85285285285,21900009999,12/12/1990,34,,Ativo
 21, ..Igor  Silva ,igor.silva@email.com,123.456.789-00,(11)98888-1111,10/05/1990,34,3500.5,Ativo
 22,Beatriz  Castro,beatriz.castro@email.com,74174174174,21988887776,01/01/1989,35,4700,Ativo
 23,Gabriel  Martins,gabriel.martins@email.com,96396396396,21999996665,02/02/1988,36,4900,Ativo

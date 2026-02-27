@@ -1,11 +1,11 @@
-'''
+"""
 Responsabilidade: escrever/exportar resultados.
-'''
+"""
 
 from pathlib import Path
 import pandas as pd
 
-def salvar_df_para_csv(
+def save_dataframe_to_csv(
     df: pd.DataFrame,
     path_csv: str | Path,
     sep: str = ",",
@@ -13,27 +13,42 @@ def salvar_df_para_csv(
     index: bool = False,
 ) -> Path:
     """
-    Salva um DataFrame como CSV.
+    Save a pandas DataFrame to a CSV file.
 
-    Responsabilidade:
-    - apenas escrita
-    - nenhuma validação semântica
-    - nenhuma transformação
-    - NÃO cria diretórios
-    - falha se diretório não existir
+    Responsibility:
+        - File writing only.
+        - No semantic validation.
+        - No transformation logic.
+        - Does not create directories.
+        - Fails if the target directory does not exist.
+
+    Args:
+        df: DataFrame to be saved.
+        path_csv: Destination file path (string or Path).
+        sep: Field separator to use in the CSV file.
+        encoding: File encoding.
+        index: Whether to write row indices.
+
+    Returns:
+        Path to the saved CSV file.
+
+    Raises:
+        TypeError: If `df` is not a pandas DataFrame.
+        ValueError: If the file extension is not ".csv".
+        FileNotFoundError: If the target directory does not exist.
+        IOError: If writing the file fails.
     """
-
     if not isinstance(df, pd.DataFrame):
-        raise TypeError("O objeto informado não é um pandas.DataFrame.")
+        raise TypeError("The provided object is not a pandas DataFrame.")
 
     path = Path(path_csv)
 
     if path.suffix.lower() != ".csv":
-        raise ValueError("O arquivo deve ter extensão .csv.")
+        raise ValueError("The file must have a .csv extension.")
 
     if not path.parent.exists():
         raise FileNotFoundError(
-            f"O diretório '{path.parent}' não existe."
+            f"The directory '{path.parent}' does not exist."
         )
 
     try:
@@ -44,7 +59,7 @@ def salvar_df_para_csv(
             index=index,
         )
     except Exception as e:
-        raise IOError(f"Erro ao salvar CSV: {e}")
+        raise IOError(f"Error saving CSV file: {e}")
 
     return path
 

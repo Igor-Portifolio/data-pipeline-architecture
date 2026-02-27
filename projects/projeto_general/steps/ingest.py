@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from projects.projeto_geral.context import ProjectContext, StepState
+from projects.projeto_general.future.context import ProjectContext, StepState
 from src.infra.io.readers import ler_csv_clinte_para_df
 
 

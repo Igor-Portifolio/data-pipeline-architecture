@@ -1,4 +1,4 @@
-from src.services.ibge_service import *
+from src.services.ibge_service_future import *
 
 
 def ingestao_ibge_sqlite(

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from projects.projeto_geral.context import ProjectContext, StepState
+from projects.projeto_general.future.context import ProjectContext, StepState
 
-from src.pipelines.auto.basic_pipeline import basic_pipeline_1st, basic_pipeline_2st
-from src.pipelines.auto.text_pipeline import (
+from src.pipelines.sanitization import basic_pipeline_1st, basic_pipeline_2st
+from src.pipelines.text_processing import (
     text_basic_pipeline,
     text_names_part_one_pipeline,
     text_names_part_two_pipeline,

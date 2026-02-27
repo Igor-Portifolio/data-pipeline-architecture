@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 from pathlib import Path
 
-db_path = Path("C:/projetos_solve/scripts_geral/data/store/memory.db")
+db_path = Path("/data/store/memory.db")
 
 conn = sqlite3.connect(db_path)
 

@@ -1,14 +1,11 @@
 # connection.py
 from __future__ import annotations
 import sqlite3
-from contextlib import contextmanager  # controle automatico de abrir e fechar a função
-from dataclasses import dataclass
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Iterable, Iterator, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Iterable, Iterator, Optional, Sequence, Union
 
-SqlitePath = Union[str, Path]  # aceita tanto string como path no caminho do banco
-
-# --- Defaults (you can override in connect_sqlite) ---------------------------
+SqlitePath = Union[str, Path]
 
 DEFAULT_PRAGMAS: Dict[str, Any] = {
     # Integrity / correctness
@@ -31,8 +28,6 @@ DEFAULT_PRAGMAS: Dict[str, Any] = {
 #     check_same_thread: bool = True
 
 
-# --- Core helpers ------------------------------------------------------------
-
 def connect_sqlite(
         db_path: SqlitePath,
         pragmas: Optional[Dict[str, Any]] = None,
@@ -43,11 +38,30 @@ def connect_sqlite(
         check_same_thread: bool = True,
 ) -> sqlite3.Connection:
     """
-    Open a SQLite connection and apply PRAGMAs.
+    Create and configure a SQLite connection.
 
-    Design choice:
-      - isolation_level=None => autocommit mode.
-      - you control transactions explicitly with `transaction()` below.
+    This function:
+        - Ensures the database directory exists.
+        - Opens a SQLite connection with the provided configuration.
+        - Sets `row_factory` to `sqlite3.Row`.
+        - Applies default and user-provided PRAGMA settings.
+
+    Transaction behavior:
+        - `isolation_level=None` enables autocommit mode.
+        - Explicit transaction control is expected via a separate
+          transaction management utility.
+
+    Args:
+        db_path: Filesystem path to the SQLite database file.
+        pragmas: Optional dictionary of PRAGMA settings to override
+            or extend the defaults.
+        timeout: Connection timeout in seconds.
+        detect_types: SQLite type detection flags.
+        isolation_level: SQLite isolation level. Use None for autocommit.
+        check_same_thread: Whether the connection may be shared across threads.
+
+    Returns:
+        A configured `sqlite3.Connection` instance.
     """
     path = Path(db_path)
     path.parent.mkdir(parents=True, exist_ok=True)  # cria diretorio caso nao exista
@@ -67,8 +81,28 @@ def connect_sqlite(
 
 def apply_pragmas(conn: sqlite3.Connection, pragmas: Dict[str, Any]) -> None:
     """
-    Apply PRAGMAs in a simplified way.
-    Assumes pragmas come from trusted internal configuration.
+    Apply SQLite PRAGMA statements to an existing connection.
+
+    This function iterates over a dictionary of PRAGMA key-value pairs
+    and executes them sequentially on the provided connection.
+
+    Security assumptions:
+        - The `pragmas` dictionary is expected to originate from
+          trusted internal configuration.
+        - A minimal validation is performed on PRAGMA keys to prevent
+          malformed or unsafe statements.
+
+    Behavior:
+        - If a value is None, executes `PRAGMA key`.
+        - If a value is a string, wraps it in single quotes.
+        - Otherwise, inserts the value directly into the statement.
+
+    Args:
+        conn: Active SQLite connection.
+        pragmas: Dictionary mapping PRAGMA names to their desired values.
+
+    Raises:
+        ValueError: If a PRAGMA key contains invalid characters.
     """
     cur = conn.cursor()
     try:
@@ -90,8 +124,6 @@ def apply_pragmas(conn: sqlite3.Connection, pragmas: Dict[str, Any]) -> None:
         cur.close()
 
 
-# --- Transactions ------------------------------------------------------------
-
 @contextmanager
 def transaction(
         conn: sqlite3.Connection,
@@ -99,17 +131,33 @@ def transaction(
         mode: str = "IMMEDIATE",
 ) -> Iterator[sqlite3.Connection]:
     """
-    Transaction context manager.
+    Provide a transactional context manager for a SQLite connection.
 
-    mode:
-      - "DEFERRED"  : lock only when needed
-      - "IMMEDIATE" : reserves a write lock early (good for batch writes)
-      - "EXCLUSIVE" : strongest lock (rarely needed)
+    This context manager explicitly starts a transaction using
+    `BEGIN <mode>` and ensures proper commit or rollback semantics.
+
+    Supported modes:
+        - "DEFERRED": Acquires locks only when required (default SQLite behavior).
+        - "IMMEDIATE": Reserves a write lock at the beginning of the transaction.
+        - "EXCLUSIVE": Acquires an exclusive lock for the duration of the transaction.
 
     Behavior:
-      - BEGIN <mode>
-      - if ok -> COMMIT
-      - if exception -> ROLLBACK and re-raise
+        - Executes `BEGIN <mode>` upon entering the context.
+        - Commits the transaction if the block completes successfully.
+        - Rolls back the transaction if an exception occurs, then re-raises it.
+
+    Args:
+        conn: Active SQLite connection.
+        mode: Transaction start mode. Must be one of
+            {"DEFERRED", "IMMEDIATE", "EXCLUSIVE"}.
+
+    Yields:
+        The active SQLite connection within the transaction scope.
+
+    Raises:
+        ValueError: If an invalid transaction mode is provided.
+        Any exception raised inside the context block is propagated
+        after rollback.
     """
     mode_u = mode.strip().upper()
     if mode_u not in {"DEFERRED", "IMMEDIATE", "EXCLUSIVE"}:
@@ -124,25 +172,32 @@ def transaction(
         raise
 
 
-# --- Convenience execution helpers ------------------------------------------
-
 def execute_many(
         conn: sqlite3.Connection,
         sql: str,
         rows: Iterable[Sequence[Any]],
 ) -> int:
     """
-    executemany wrapper returning affected rowcount (best-effort; sqlite can return -1).
+    Execute a parameterized SQL statement against multiple rows.
+
+    This function wraps `cursor.executemany` and returns the number of
+    affected rows. Note that SQLite may return -1 for `rowcount`
+    depending on the statement type and driver behavior.
+
+    Args:
+        conn: Active SQLite connection.
+        sql: Parameterized SQL statement to execute.
+        rows: Iterable of parameter sequences to bind to the statement.
+
+    Returns:
+        Number of affected rows as reported by the cursor.
+        May return -1 if the underlying driver does not provide
+        a reliable row count.
     """
+
     cur = conn.cursor()
     try:
         cur.executemany(sql, rows)
         return cur.rowcount
     finally:
         cur.close()
-
-
-
-
-
-

@@ -1,106 +1,115 @@
-import pandas as pd
-from src.domain.vocabulary.voc_temporal import *
-from typing import Optional
+from src.domain.vocabulary.temporal import *
+from typing import Optional, Iterable
 from datetime import date, datetime
 
 
-def categorizar_data_nascimento(data_nascimento):
+def categorize_birth_date(
+        birth_date: date | datetime | str,
+        *,
+        age_bins: Iterable[int],
+        age_labels: Iterable[str],
+) -> str:
     """
-    Recebe uma data de nascimento e retorna a categoria etária.
+    Categorize a birth date into an age group.
+
+    Args:
+        birth_date: Date of birth (date, datetime or ISO string).
+        age_bins: Upper bounds of age intervals.
+        age_labels: Labels corresponding to each age interval.
+
+    Returns:
+        Age category label.
+
+    Raises:
+        ValueError: If input is invalid or age is negative.
     """
+    if birth_date is None:
+        raise ValueError("Birth date cannot be null.")
 
-    if pd.isna(data_nascimento):
-        raise ValueError("Data de nascimento inválida: valor nulo.")
+    if isinstance(birth_date, datetime):
+        birth_date = birth_date.date()
 
-    # ======================================================
-    # 1. Converter para date
-    # ======================================================
-    if isinstance(data_nascimento, datetime):
-        data_nascimento = data_nascimento.date()
-
-    elif isinstance(data_nascimento, date):
-        pass
-
-    elif isinstance(data_nascimento, str):
+    elif isinstance(birth_date, str):
         try:
-            data_nascimento = pd.to_datetime(data_nascimento).date()
-        except Exception:
-            raise ValueError(f"Data de nascimento inválida: {data_nascimento}")
+            birth_date = datetime.fromisoformat(birth_date).date()
+        except ValueError:
+            raise ValueError(f"Invalid birth date: {birth_date}")
 
-    else:
-        raise ValueError(f"Tipo inválido para data de nascimento: {type(data_nascimento)}")
+    elif not isinstance(birth_date, date):
+        raise ValueError(f"Invalid type for birth date: {type(birth_date)}")
 
-    hoje = date.today()
+    today = date.today()
 
-    if data_nascimento > hoje:
-        raise ValueError(
-            f"Data de nascimento no futuro: {data_nascimento}"
-        )
+    if birth_date > today:
+        raise ValueError(f"Birth date is in the future: {birth_date}")
 
-    # ======================================================
-    # 2. Calcular idade (anos completos)
-    # ======================================================
-    idade = hoje.year - data_nascimento.year
+    age = today.year - birth_date.year
+    if (today.month, today.day) < (birth_date.month, birth_date.day):
+        age -= 1
 
-    if (hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day):
-        idade -= 1
+    if age < 0:
+        raise ValueError(f"Invalid calculated age: {age}")
 
-    if idade < 0:
-        raise ValueError(f"Idade inválida calculada: {idade}")
+    bins = list(age_bins)
+    labels = list(age_labels)
 
-    # ======================================================
-    # 3. Categorizar idade
-    # ======================================================
-    categoria = pd.cut(
-        x=[idade],
-        bins=AGE_BINS,
-        labels=AGE_LABELS,
-        right=True,
-        include_lowest=True
-    )[0]
+    if len(labels) != len(bins) - 1:
+        raise ValueError("age_labels must have len(age_bins) - 1 elements.")
 
-    return str(categoria)
+    for i in range(len(bins) - 1):
+        lower = bins[i]
+        upper = bins[i + 1]
+        if lower <= age <= upper:
+            return labels[i]
 
-def classificar_intervalo_ano(valor) -> Optional[str]:
+    raise ValueError(f"Age {age} does not fit in provided bins.")
+
+
+def classify_year_interval(value: int | str | date | datetime) -> Optional[str]:
     """
-    Classifica uma data ou ano em um intervalo semântico pré-definido.
+    Classify a year (or year-bearing value) into a predefined semantic interval.
+
+    Supported inputs:
+        - int year
+        - date/datetime (uses .year)
+        - str in formats: YYYY-MM-DD, DD/MM/YYYY, YYYY
+
+    Classification rule:
+        Uses (start, end] intervals: start < year <= end.
+
+    Args:
+        value: Input value containing a year.
+
+    Returns:
+        Interval label if the year fits a bin; otherwise None.
     """
+    year: Optional[int] = None
 
-    # ======================================================
-    # 1. Extrair ano
-    # ======================================================
-    ano = None
+    if isinstance(value, int):
+        year = value
+    elif isinstance(value, (date, datetime)):
+        year = value.year
+    elif isinstance(value, str):
+        text = value.strip()
+        if text:
+            for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%Y"):
+                try:
+                    year = datetime.strptime(text, fmt).year
+                    break
+                except ValueError:
+                    continue
 
-    if isinstance(valor, int):
-        ano = valor
-
-    elif isinstance(valor, (date, datetime)):
-        ano = valor.year
-
-    elif isinstance(valor, str):
-        valor = valor.strip()
-
-        # tenta pegar ano em formatos comuns
-        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%Y"):
-            try:
-                ano = datetime.strptime(valor, fmt).year
-                break
-            except ValueError:
-                continue
-
-    if ano is None or ano < 0:
+    if year is None or year < 0:
         return None
 
-    # ======================================================
-    # 2. Classificar no bin correto
-    # ======================================================
-    for i in range(len(YEAR_BINS) - 1):
-        inicio = YEAR_BINS[i]
-        fim = YEAR_BINS[i + 1]
+    if len(YEAR_RANGE_LABELS) != len(YEAR_BINS) - 1:
+        raise ValueError("YEAR_RANGE_LABELS must have len(YEAR_BINS) - 1 elements.")
 
-        if inicio < ano <= fim:
+    for i in range(len(YEAR_BINS) - 1):
+        start = YEAR_BINS[i]
+        end = YEAR_BINS[i + 1]
+
+        if start < year <= end:
             return YEAR_RANGE_LABELS[i]
 
     return None
-
-

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional
 import pandas as pd
 
-from projects.projeto_geral.config import ClientConfig
+from projects.projeto_general.future.config import ClientConfig
 
 
 @dataclass(frozen=True)

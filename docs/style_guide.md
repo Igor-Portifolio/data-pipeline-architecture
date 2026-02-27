@@ -38,7 +38,12 @@ The system is organized into distinct layers. Each layer has a specific role and
 
 * **`infra/`**
   Handles all external interactions (database access, file systems, APIs, logging backends).
-  Infrastructure concerns must never leak into domain logic.
+Infrastructure concerns must never leak into domain logic.
+
+* **`review/`**
+  Handles structured logging functions based on name and email validation rules.
+* **`future/`**
+  Contains experimental code and architectural ideas planned for future development.
 
 Cross-layer dependencies must follow this direction:
 `domain → services → pipelines → infra`

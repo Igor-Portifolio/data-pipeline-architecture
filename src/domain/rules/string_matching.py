@@ -1,4 +1,5 @@
 from src.domain.primitives.text_similarity import jaro_winkler_score
+from src.domain.primitives.text_patterns import EMAIL_REGEX
 from typing import Optional
 
 
@@ -67,3 +68,9 @@ def choose_best_match(
         results.append(best_match)
 
     return results
+
+
+def is_valid_email(value: str) -> bool:
+    if not isinstance(value, str):
+        return False
+    return bool(EMAIL_REGEX.match(value.strip()))

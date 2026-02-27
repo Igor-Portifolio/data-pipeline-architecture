@@ -1,5 +1,5 @@
 from src.domain.rules.temporal import *
-
+import pandas as pd
 
 class AgeClassifier:
     def __init__(self, df: pd.DataFrame, ):
@@ -20,7 +20,7 @@ class AgeClassifier:
 
         # Calcula faixa etária
         faixa_etaria = self.df[coluna_data_nascimento].apply(
-            categorizar_data_nascimento
+            categorize_birth_date
         )
 
         nome_coluna = "faixa_etaria"
@@ -47,7 +47,7 @@ class AgeClassifier:
 
         # aplica a função de domínio
         decadas = self.df[coluna_data].apply(
-            classificar_intervalo_ano
+            classify_year_interval
         )
 
         idx = self.df.columns.get_loc(coluna_data) + 1

@@ -1,4 +1,4 @@
-from projects.projeto_geral.config import ClientConfig, FileType
+from projects.projeto_general.future.config import ClientConfig, FileType
 from src.infra.io.paths import raw_data_file_path, logs_data_file_path, stagging_data_file_path, curated_data_file_path
 from pathlib import Path
 

@@ -193,6 +193,7 @@ DOMINIOS_EMAIL_COMUNS = {
     "proton.me",
     "protonmail.com",
     "zoho.com",
+    "email.com"
 }
 
 # Conjunto de possibilidades de um telefone válido

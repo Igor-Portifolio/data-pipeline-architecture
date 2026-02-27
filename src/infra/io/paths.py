@@ -1,8 +1,6 @@
-'''
-Responsabilidade: resolver caminhos e padronizar onde ficam as coisas.
-
-C:\projetos_solve\scripts_geral\src\infra\io\paths.py
-'''
+"""
+Responsibility: resolve paths and standardize where components and resources are located.
+"""
 
 from __future__ import annotations
 from pathlib import Path
@@ -16,47 +14,61 @@ logs_dir = project_root / "data" / "logs" / "nomes"
 
 def raw_data_file_path(filename: str) -> Path:
     """
-    Retorna o Path absoluto para um arquivo dentro de data/raw.
+    Return the absolute Path to a file inside the data/raw directory.
 
-    Regras:
-      - filename deve conter extensão (ex: .csv, .xlsx)
-      - filename não pode conter diretórios
-      - apenas o nome completo do arquivo é permitido
+    Rules:
+        - `filename` must include a file extension (e.g., ".csv", ".xlsx").
+        - `filename` must not contain directory components.
+        - Only the complete file name is allowed.
 
-    Exemplo:
-        raw_file_path("clientes_2026.csv")
+    Example:
+        raw_data_file_path("clientes_2026.csv")
     """
     if not isinstance(filename, str) or not filename.strip():
-        raise ValueError("filename deve ser uma string não vazia.")
+        raise ValueError("filename must be a non-empty string.")
 
     filename = filename.strip()
 
-    # Não permitir caminho junto
     if Path(filename).name != filename:
-        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+        raise ValueError("Provide only the file name, without directories.")
 
-    # Obrigatório ter extensão
     if "." not in filename:
-        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+        raise ValueError("The file name must contain an extension (e.g., .csv).")
 
     path = data_path / "client" / filename
 
     return path
 
 
-def stagging_data_file_path(filename: str) -> Path:
+def staging_data_file_path(filename: str) -> Path:
+    """
+    Return the absolute Path to a file inside the data/raw directory.
+
+    Rules:
+        - `filename` must include a file extension (e.g., ".csv", ".xlsx").
+        - `filename` must not contain directory components.
+        - Only the complete file name is allowed.
+
+    Args:
+        filename: Name of the file to resolve.
+
+    Returns:
+        Absolute Path pointing to the file inside the data/raw directory.
+
+    Raises:
+        ValueError: If the filename is empty, contains directories,
+        or does not include a file extension.
+    """
     if not isinstance(filename, str) or not filename.strip():
-        raise ValueError("filename deve ser uma string não vazia.")
+        raise ValueError("filename must be a non-empty string.")
 
     filename = filename.strip()
 
-    # Não permitir caminho junto
     if Path(filename).name != filename:
-        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+        raise ValueError("Provide only the file name, without directories.")
 
-    # Obrigatório ter extensão
     if "." not in filename:
-        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+        raise ValueError("The file name must contain an extension (e.g., .csv).")
 
     path = staging_dir / filename
 
@@ -64,18 +76,34 @@ def stagging_data_file_path(filename: str) -> Path:
 
 
 def curated_data_file_path(filename: str) -> Path:
+    """
+    Return the absolute Path to a file inside the curated directory.
+
+    Rules:
+        - `filename` must include a file extension (e.g., ".csv", ".xlsx").
+        - `filename` must not contain directory components.
+        - Only the complete file name is allowed.
+
+    Args:
+        filename: Name of the file to resolve.
+
+    Returns:
+        Absolute Path pointing to the file inside the curated directory.
+
+    Raises:
+        ValueError: If the filename is empty, contains directories,
+        or does not include a file extension.
+    """
     if not isinstance(filename, str) or not filename.strip():
-        raise ValueError("filename deve ser uma string não vazia.")
+        raise ValueError("filename must be a non-empty string.")
 
     filename = filename.strip()
 
-    # Não permitir caminho junto
     if Path(filename).name != filename:
-        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+        raise ValueError("Provide only the file name, without directories.")
 
-    # Obrigatório ter extensão
     if "." not in filename:
-        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+        raise ValueError("The file name must contain an extension (e.g., .csv).")
 
     path = curated_dir / filename
 
@@ -83,18 +111,34 @@ def curated_data_file_path(filename: str) -> Path:
 
 
 def logs_data_file_path(filename: str) -> Path:
+    """
+    Return the absolute Path to a file inside the logs directory.
+
+    Rules:
+        - `filename` must include a file extension (e.g., ".csv", ".xlsx").
+        - `filename` must not contain directory components.
+        - Only the complete file name is allowed.
+
+    Args:
+        filename: Name of the file to resolve.
+
+    Returns:
+        Absolute Path pointing to the file inside the logs directory.
+
+    Raises:
+        ValueError: If the filename is empty, contains directories,
+        or does not include a file extension.
+    """
     if not isinstance(filename, str) or not filename.strip():
-        raise ValueError("filename deve ser uma string não vazia.")
+        raise ValueError("filename must be a non-empty string.")
 
     filename = filename.strip()
 
-    # Não permitir caminho junto
     if Path(filename).name != filename:
-        raise ValueError("Forneça apenas o nome do arquivo, sem diretórios.")
+        raise ValueError("Provide only the file name, without directories.")
 
-    # Obrigatório ter extensão
     if "." not in filename:
-        raise ValueError("O nome do arquivo deve conter extensão (ex: .csv).")
+        raise ValueError("The file name must contain an extension (e.g., .csv).")
 
     path = logs_dir / filename
 

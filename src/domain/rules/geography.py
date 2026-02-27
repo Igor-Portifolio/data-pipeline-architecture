@@ -1,4 +1,4 @@
-from src.domain.vocabulary.voc_geografia import regiao_por_uf, nome_para_uf
+from src.domain.vocabulary.geography import regiao_por_uf, nome_para_uf
 from typing import Optional
 
 

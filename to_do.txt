@@ -1,5 +1,1 @@
-
-2) Definir convenções oficiais (1 arquivo)
-
-Limpar namings e docstrings
-3) Limpar o “lixo sem nome”
+repensar | reescrever | renomear pipeline de texto.

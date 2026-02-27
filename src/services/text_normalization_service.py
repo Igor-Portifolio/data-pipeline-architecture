@@ -1,9 +1,10 @@
 from typing import Optional, Union, List
 from src.domain.rules.name_normalization import clean_name_domain_pipeline
 import pandas as pd
-from src.domain.vocabulary.voc_lingua import tel_len, preposicoes_minusculas
+from src.domain.vocabulary.language import tel_len, preposicoes_minusculas
 from typing import Iterable
 from src.domain.primitives.text_normalization import remove_accents, smart_titlecase, normalize_person_name_characters
+from src.domain.rules.string_matching import is_valid_email
 
 
 class TextNormalizationService:
@@ -112,7 +113,6 @@ class TextNormalizationService:
 
         return self.df
 
-
     def remove_values_without_letters(self, column: str) -> pd.DataFrame:
         """
         Set values to pd.NA when, after name character normalization,
@@ -169,7 +169,7 @@ class TextNormalizationService:
         valid_lengths = set(allowed_lengths)
         valid_mask = digits.notna() & digits.str.len().isin(valid_lengths)
 
-        out[column] = digits.where(valid_mask, pd.NA)
+        out[column] = digits.mask(~valid_mask, pd.NA)
 
         self.df = out
         return self.df
@@ -207,7 +207,93 @@ class TextNormalizationService:
 
         valid_mask = digits.notna() & (digits.str.len() == cpf_length)
 
-        out[column] = digits.where(valid_mask, pd.NA)
+        out[column] = digits.mask(~valid_mask, pd.NA)
 
         self.df = out
         return self.df
+
+    def validate_email_column(
+            self,
+            column: str,
+    ) -> pd.DataFrame:
+        """
+        Validate email values in a specific column.
+
+        Invalid email values are replaced with pd.NA.
+        Valid email values remain unchanged.
+
+        Args:
+            column: Name of the column containing email values.
+
+        Returns:
+            A DataFrame with invalid emails removed (set to pd.NA).
+
+        Raises:
+            KeyError: If the specified column does not exist.
+        """
+
+        df = self.df.copy()
+
+        if column not in df.columns:
+            raise KeyError(f"Column '{column}' not found in DataFrame.")
+
+        def validate(value):
+            if is_valid_email(value):
+                return value
+            return pd.NA
+
+        df[column] = df[column].apply(validate)
+
+        self.df = df
+        return df
+
+    def move_email_from_name_column(
+            self,
+            column_name: str,
+            column_email: str,
+    ) -> pd.DataFrame:
+        """
+        Move valid email values from a name column to an email column when needed.
+
+        For each row:
+            - If `column_name` contains a valid email:
+                - If `column_email` is empty, move the value to `column_email`
+                  and set `column_name` to pd.NA.
+                - If `column_email` is already filled, do nothing.
+            - If `column_name` does not contain a valid email, do nothing.
+
+        Args:
+            column_name: Column that may contain misplaced email values.
+            column_email: Target email column.
+
+        Returns:
+            A DataFrame with corrected email placement.
+
+        Raises:
+            KeyError: If either column does not exist.
+        """
+
+        df = self.df.copy()
+
+        if column_name not in df.columns:
+            raise KeyError(f"Column '{column_name}' not found in DataFrame.")
+
+        if column_email not in df.columns:
+            raise KeyError(f"Column '{column_email}' not found in DataFrame.")
+
+        name_series = df[column_name]
+        email_series = df[column_email]
+
+        name_as_str = name_series.astype("string").str.strip()
+        name_has_email = name_as_str.map(is_valid_email)
+
+        email_as_str = email_series.astype("string").str.strip()
+        email_is_empty = email_as_str.isna() | (email_as_str == "")
+
+        should_move = name_has_email & email_is_empty
+
+        df.loc[should_move, column_email] = name_series.loc[should_move]
+        df.loc[should_move, column_name] = pd.NA
+
+        self.df = df
+        return df

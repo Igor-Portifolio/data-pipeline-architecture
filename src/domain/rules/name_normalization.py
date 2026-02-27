@@ -1,4 +1,4 @@
-from src.domain.vocabulary.voc_lingua import *
+from src.domain.vocabulary.language import *
 import re
 from typing import List, Optional
 from src.domain.primitives.tokenization import tokenize_words

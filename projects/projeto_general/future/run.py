@@ -1,5 +1,5 @@
 """
-projects/projeto_geral/run.py
+projects/projeto_general/run.py
 
 Runner simples com:
 - pipelines como listas de steps (p1, p2, full)
@@ -7,8 +7,8 @@ Runner simples com:
 - opcional: --until para parar em um step
 
 Exemplos:
-  python -m projects.projeto_geral.run --pipeline p1 --revision RevA
-  python -m projects.projeto_geral.run --pipeline full --revision RevB --until transform
+  python -m projects.projeto_general.run --pipeline p1 --revision RevA
+  python -m projects.projeto_general.run --pipeline full --revision RevB --until transform
 """
 
 from __future__ import annotations
@@ -16,11 +16,11 @@ from __future__ import annotations
 import argparse
 from typing import Callable, Iterable, Optional, Tuple
 
-from projects.projeto_geral.config import config  # instancia de ClientConfig
-from projects.projeto_geral.paths import build_paths
-from projects.projeto_geral.context import ProjectContext, StepState
+from projects.projeto_general.future.config import config  # instancia de ClientConfig
+from projects.projeto_general.future.paths import build_paths
+from projects.projeto_general.future.context import ProjectContext, StepState
 
-from projects.projeto_geral.steps import ingest, transform, quality_report, export
+from projects.projeto_general.steps import ingest, transform, quality_report, export
 
 
 StepFn = Callable[[ProjectContext, StepState], StepState]
@@ -46,7 +46,7 @@ PIPELINES: dict[str, list[Step]] = {
 
 
 def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Runner do projeto_geral")
+    parser = argparse.ArgumentParser(description="Runner do projeto_general")
     parser.add_argument(
         "--pipeline",
         choices=PIPELINES.keys(),
