@@ -80,15 +80,18 @@ rules remain deterministic and testable, enabling the system to scale safely as 
 The final cleaning step consists of a final null normalization.
 
 Note that the NAME PIPELINE is where most of the core logic happens.
-This stage performs name cleaning based on controlled vocabularies and predefined rules, and generates CSV log files for manual review.
-These logs are created based on flags such as unusually long names or misplaced email patterns within name fields, allowing structured human validation when automated rules are not sufficient.
+This stage performs name cleaning based on controlled vocabularies and predefined rules, and generates CSV log files for
+manual review.
+These logs are created based on flags such as unusually long names or misplaced email patterns within name fields,
+allowing structured human validation when automated rules are not sufficient.
 
 
 ---
 
 ## 1.0 Project Motivation
 
-While working as a freelance consultant cleaning spreadsheets and developing ETL pipelines for data cleaning and normalization, I noticed that I was repeatedly writing the same lines of
+While working as a freelance consultant cleaning spreadsheets and developing ETL pipelines for data cleaning and
+normalization, I noticed that I was repeatedly writing the same lines of
 code and utility functions to normalize text columns. Name fields, email addresses, and other registration data required
 similar validation and transformation patterns across different projects. This repetition led to the idea of building a
 reusable and structured solution.
@@ -102,7 +105,8 @@ for cleaning and enriching structured registration data. Instead of isolated scr
 this project provides a consistent and scalable foundation for applying deterministic rules, standardizing data, and
 enabling controlled review workflows.
 
-Applying the tools developed in this project enhances data quality, ensures consistency, and increases overall reliability across processing workflows.
+Applying the tools developed in this project enhances data quality, ensures consistency, and increases overall
+reliability across processing workflows.
 
 ---
 
@@ -226,16 +230,6 @@ require manual review and adjustment before running the final cleaning stage.
 | 12        | CELY LEAL GETULINACELI LEAL SILVA | ['LONG_NAME']          | ['LONG_NAME']          | CELY LEAL GETULINACELI LEAL SILVA |
 | 18        | IGOR MICHALAWISKIMACHADO          | ['LONG_NAME']          | ['LONG_NAME']          | IGOR MICHALAWISKI MACHADO         |
 | 19        | DIEGORIBEIROEMAILCOM              | ['LONG_NAME', 'EMAIL'] | ['LONG_NAME', 'EMAIL'] | DIEGO RIBEIRO                     |
-
----
-
-
-
-
-
-
-
-
 
 ---
 
