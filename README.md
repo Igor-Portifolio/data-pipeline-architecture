@@ -11,11 +11,84 @@ This project automates the cleaning, standardization, and enrichment of structur
 reducing manual effort and improving data reliability. Its layered and well-defined architecture ensures that business
 rules remain deterministic and testable, enabling the system to scale safely as complexity and data volume grow.
 
+<p align="center">
+  <img src="docs/IMAGES/batch_data_flow_architeture.png" width="600"/>
+</p>
+
+
+
+
+
+
+<details>
+<summary><strong>Layered ETL Pipeline</strong></summary>
+
+<br>
+
+<p align="center">
+  <img src="docs/IMAGES/layered_etl_pipeline.png" width="600"/>
+</p>
+
+<p align="center">
+  <em>Figure 2 — Layered ETL pipeline.</em>
+</p>
+
+</details>
+
+
+
+
+
+
+
+
+<details>
+<summary><strong>DATA CLEANING: INITIAL STAGE</strong></summary>
+
+<br>
+
+<p align="center">
+  <img src="docs/IMAGES/DATA CLEANING.png" width="600"/>
+</p>
+
+<p align="center">
+  <em>Figure 3 — DATA CLEANING: INITIAL STAGE.</em>
+</p>
+
+</details>
+
+
+
+
+
+
+<details>
+<summary><strong>TEXT NOMALIZATION</strong></summary>
+
+<br>
+
+<p align="center">
+  <img src="docs/IMAGES/TEXT NOMALIZATION.png" width="600"/>
+</p>
+
+<p align="center">
+  <em>Figure 4 — TEXT NOMALIZATION.</em>
+</p>
+
+</details>
+
+The final cleaning step consists of a final null normalization.
+
+Note that the NAME PIPELINE is where most of the core logic happens.
+This stage performs name cleaning based on controlled vocabularies and predefined rules, and generates CSV log files for manual review.
+These logs are created based on flags such as unusually long names or misplaced email patterns within name fields, allowing structured human validation when automated rules are not sufficient.
+
+
 ---
 
 ## 1.0 Project Motivation
 
-While working as a freelance consultant cleaning spreadsheets, I noticed that I was repeatedly writing the same lines of
+While working as a freelance consultant cleaning spreadsheets and developing ETL pipelines for data cleaning and normalization, I noticed that I was repeatedly writing the same lines of
 code and utility functions to normalize text columns. Name fields, email addresses, and other registration data required
 similar validation and transformation patterns across different projects. This repetition led to the idea of building a
 reusable and structured solution.
@@ -28,6 +101,8 @@ The specific gap this project fills is the absence of a lightweight, reusable, a
 for cleaning and enriching structured registration data. Instead of isolated scripts tailored to individua spreadsheets,
 this project provides a consistent and scalable foundation for applying deterministic rules, standardizing data, and
 enabling controlled review workflows.
+
+Applying the tools developed in this project enhances data quality, ensures consistency, and increases overall reliability across processing workflows.
 
 ---
 
