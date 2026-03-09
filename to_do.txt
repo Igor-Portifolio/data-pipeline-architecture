@@ -1,0 +1,19 @@
+Some AWS design principles:
+- Implement observability to colect insides-> Montar pequenos relatórias de mudanças realizadas e quais dados foram corrigidos.
+
+- Safe automate when possible
+
+- MAKE FREQUENT SMALL REVERSIBLE CHANGES: LOOSELY COUPLED
+
+- REFINE OP
+
+--------------------------------------------
+
+- Tornar pipeline nomes mais flexivel -> ApenaS testar para ver se esta tudo.
+- Implementar melhor verificação de duplicados
+- Implementar cruzamento de dados
+- testar pequena parte do endereço
+- X check bairros -> SQL pode ser bem util
+- Inputs de dados de forma mais eficiente
+- Uso de shell para uso de pipelines
+

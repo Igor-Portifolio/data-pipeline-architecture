@@ -93,14 +93,25 @@ class TextNormalizationService:
 
         return self.df
 
-    def clean_proper_names_column(self, column: str, *, keep_numbers: bool = False) -> pd.DataFrame:
+    def clean_proper_names_column(self,
+                                  column: str,
+                                  *,
+                                  keep_numbers: bool = False,
+                                  keep_professions: bool = False,
+                                  keep_political: bool = False,
+                                  keep_universities: bool = False,
+                                  keep_states: bool = False,
+                                  ) -> pd.DataFrame:
         """
         Apply the proper-name cleaning domain pipeline to a DataFrame column.
 
         Args:
             column: Name of the column to process.
             keep_numbers: If True, skips character normalization that would remove digits.
-
+            keep_professions: If True, skips character normalization that would remove professions.
+            keep_political: If True, skips character normalization that would remove political parties.
+            keep_universities: If True, skips character normalization that would remove universities.
+            keep_states: If True, skips character normalization that would remove states.
         Returns:
             DataFrame with the cleaned column.
         """
@@ -108,8 +119,13 @@ class TextNormalizationService:
             raise KeyError(f"Column '{column}' was not found in the DataFrame.")
 
         self.df[column] = self.df[column].apply(
-            lambda x: clean_name_domain_pipeline(x, keep_numbers=keep_numbers)
-        )
+            lambda x: clean_name_domain_pipeline(x,
+                                                 keep_numbers=keep_numbers,
+                                                 keep_states= keep_states,
+                                                 keep_universities= keep_universities,
+                                                 keep_political=keep_political,
+                                                 keep_professions=keep_professions
+                                                ))
 
         return self.df
 

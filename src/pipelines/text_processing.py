@@ -13,6 +13,12 @@ def text_normalization_and_validation(
         column_name: str | list[str] | None = None,
         column_cpf: str | None = None,
         column_tel: str | None = None,
+        *,
+        keep_numbers: bool = False,
+        keep_professions: bool = False,
+        keep_political: bool = False,
+        keep_universities: bool = False,
+        keep_states: bool = False
 ) -> pd.DataFrame:
     """
     Run a basic text normalization pipeline over selected DataFrame columns.
@@ -32,6 +38,11 @@ def text_normalization_and_validation(
         column_name: Name column name or list of column names.
         column_cpf: CPF column name.
         column_tel: Telephone column name.
+        keep_numbers: If True, skips character normalization that would remove digits.
+        keep_professions: If True, skips character normalization that would remove professions.
+        keep_political: If True, skips character normalization that would remove political parties.
+        keep_universities: If True, skips character normalization that would remove universities.
+        keep_states: If True, skips character normalization that would remove states.
 
     Returns:
         A DataFrame with text-related transformations applied.
@@ -85,6 +96,11 @@ def text_normalization_and_validation(
             )
         cleaner.clean_proper_names_column(
             column=column_name,
+            keep_numbers=keep_numbers,
+            keep_professions=keep_professions,
+            keep_universities=keep_universities,
+            keep_states=keep_states,
+            keep_political=keep_political,
         )
 
     if column_cpf is not None:

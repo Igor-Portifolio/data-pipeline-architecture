@@ -1,6 +1,6 @@
 preposicoes_minusculas = {'de', 'da', 'do', 'dos', 'e', 'di', 'du', 'em', 'com', 'para', 'por'}
 
-titulos_profissoes = [
+titulos_profissoes = {
             "dr", "dra", "doutor", "doutora",
             "eng", "engenheiro", "engenheira",
             "prof", "professor", "professora",
@@ -8,9 +8,9 @@ titulos_profissoes = [
             "comerciante",
             "adv", "advogado", "advogada",
             "administrador", "administradora","adm"
-        ]
+}
 
-partidos_politicos = [
+partidos_politicos = {
     "pl",
     "pt",
     "psdb",
@@ -38,9 +38,9 @@ partidos_politicos = [
     "rede",
     "up",
     "tv"
-]
+}
 
-universidades_federais = [
+universidades_federais = {
     "ufrj",
     "ufmg",
     "ufrgs",
@@ -67,9 +67,9 @@ universidades_federais = [
     "unifesp",
     "unirio",
     "ufabc"
-]
+}
 
-ufs_brasil = [
+ufs_brasil = {
     "ac",
     "al",
     "ap",
@@ -97,7 +97,7 @@ ufs_brasil = [
     "sp",
     "se",
     "to"
-]
+}
 
 
 RELACOES_FAMILIARES = {

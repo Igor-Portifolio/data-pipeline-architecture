@@ -138,6 +138,104 @@ def evaluate_name_flags(
     return flags
 
 
+def remove_titles_professions(text: str) -> str:
+    """
+    Remove predefined invalid terms from text.
+
+    The function performs a case-insensitive match against a predefined
+    collection of invalid terms and removes full-word occurrences,
+    optionally followed by a period.
+
+    Args:
+        text: Input string to sanitize.
+
+    Returns:
+        Cleaned string with invalid terms removed.
+        Returns an empty string if input is not a string.
+    """
+
+    if not isinstance(text, str):
+        return ""
+
+    pattern = r"\b(" + "|".join(re.escape(term) for term in titulos_profissoes) + r")\.?\b"
+    cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
+
+    return cleaned_text
+
+
+def remove_political_parties(text: str) -> str:
+    """
+    Remove predefined invalid terms from text.
+
+    The function performs a case-insensitive match against a predefined
+    collection of invalid terms and removes full-word occurrences,
+    optionally followed by a period.
+
+    Args:
+        text: Input string to sanitize.
+
+    Returns:
+        Cleaned string with invalid terms removed.
+        Returns an empty string if input is not a string.
+    """
+    if not isinstance(text, str):
+        return ""
+    pattern = r"\b(" + "|".join(re.escape(term) for term in partidos_politicos) + r")\.?\b"
+    cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
+
+    return cleaned_text
+
+
+def remove_universities(text: str) -> str:
+    """
+    Remove predefined invalid terms from text.
+
+    The function performs a case-insensitive match against a predefined
+    collection of invalid terms and removes full-word occurrences,
+    optionally followed by a period.
+
+    Args:
+        text: Input string to sanitize.
+
+    Returns:
+        Cleaned string with invalid terms removed.
+        Returns an empty string if input is not a string.
+    """
+    if not isinstance(text, str):
+        return ""
+    pattern = r"\b(" + "|".join(re.escape(term) for term in universidades_federais) + r")\.?\b"
+    cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
+
+    return cleaned_text
+
+
+def remove_states(text: str) -> str:
+    """
+    Remove predefined invalid terms from text.
+
+    The function performs a case-insensitive match against a predefined
+    collection of invalid terms and removes full-word occurrences,
+    optionally followed by a period.
+
+    Args:
+        text: Input string to sanitize.
+
+    Returns:
+        Cleaned string with invalid terms removed.
+        Returns an empty string if input is not a string.
+    """
+    if not isinstance(text, str):
+        return ""
+    pattern = r"\b(" + "|".join(re.escape(term) for term in ufs_brasil) + r")\.?\b"
+    cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
+
+    return cleaned_text
+
+
 def remove_invalid_terms(text: str) -> str:
     """
     Remove predefined invalid terms from text.
@@ -157,17 +255,12 @@ def remove_invalid_terms(text: str) -> str:
         return ""
 
     invalid_terms = (
-            set(titulos_profissoes)
-            | set(partidos_politicos)
-            | set(universidades_federais)
-            | set(ufs_brasil)
+            titulos_profissoes
+            | partidos_politicos
+            | universidades_federais
+            | ufs_brasil
     )
-
-    if not invalid_terms:
-        return text.strip()
-
     pattern = r"\b(" + "|".join(re.escape(term) for term in invalid_terms) + r")\.?\b"
-
     cleaned_text = re.sub(pattern, "", text, flags=re.IGNORECASE)
     cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text).strip()
 
@@ -196,12 +289,7 @@ def is_linguistically_invalid_name(text: str) -> bool:
             | RESPOSTAS_INVALIDAS
             | TOKENS_INVALIDOS_SOLOS
     )
-
-    if not invalid_terms:
-        return False
-
     pattern = r"\b(" + "|".join(re.escape(term) for term in invalid_terms) + r")\b"
-
     return bool(re.search(pattern, text, flags=re.IGNORECASE))
 
 
@@ -223,7 +311,15 @@ def text_contains_letters(text: str) -> bool:
     return bool(re.search(r"[A-Za-zÀ-ÿ]", text))
 
 
-def clean_name_domain_pipeline(text: str, *, keep_numbers: bool = False) -> str | None:
+def clean_name_domain_pipeline(
+        text: str,
+        *,
+        keep_numbers: bool = False,
+        keep_professions: bool = False,
+        keep_political: bool = False,
+        keep_universities: bool = False,
+        keep_states: bool = False,
+) -> str | None:
     """
     Clean a raw text into a name-like string or return None if invalid.
 
@@ -233,6 +329,10 @@ def clean_name_domain_pipeline(text: str, *, keep_numbers: bool = False) -> str 
     Args:
         text: Raw input string.
         keep_numbers: If True, skips character normalization that would remove digits.
+        keep_professions: If True, skips character normalization that would remove professions.
+        keep_political: If True, skips character normalization that would remove political parties.
+        keep_universities: If True, skips character normalization that would remove universities.
+        keep_states: If True, skips character normalization that would remove states.
 
     Returns:
         A cleaned name-like string if valid; otherwise None.
@@ -244,14 +344,19 @@ def clean_name_domain_pipeline(text: str, *, keep_numbers: bool = False) -> str 
     if not text:
         return None
 
-    text = remove_invalid_terms(text)
-
+    # text = remove_invalid_terms(text)
+    if not keep_states:
+        text = remove_states(text)
+    if not keep_political:
+        text = remove_political_parties(text)
+    if not keep_universities:
+        text = remove_universities(text)
+    if not keep_professions:
+        text = remove_titles_professions(text)
     if not keep_numbers:
         text = normalize_person_name_characters(text)
-
     if is_linguistically_invalid_name(text):
         return None
-
     if not text_contains_letters(text):
         return None
 
